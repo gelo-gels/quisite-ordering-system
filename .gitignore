@@ -1,0 +1,6 @@
+flask_tutorial.py
+tmp.py
+backup.txt
+HWDB.db
+*order_details*
+__pycache__
