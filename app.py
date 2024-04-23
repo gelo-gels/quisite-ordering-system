@@ -8,7 +8,7 @@ from functools import wraps
 from flask import (
     Flask, render_template, g, request,
     session, flash, redirect, url_for,
-    json, jsonify,
+    json, jsonify, send_file,
 )
 
 sqlite3.enable_callback_tracebacks(True)
@@ -114,6 +114,27 @@ def index():
     renders login page
     '''
     return render_template("index.html")
+
+@app.route("/homepage.html")
+def homepage():
+    '''
+    renders home page
+    '''
+    return render_template("homepage.html")
+
+# Route to serve image file
+@app.route('/search')
+def get_search_image():
+    filename = 'templates/assets/search.png'  # Path to your image file
+    return send_file(filename, mimetype='image/png')
+
+@app.route('/user')
+def get_user_image():
+    filename = 'templates/assets/user.png'  # Path to your image file
+    return send_file(filename, mimetype='image/png')
+
+
+
 
 
 @app.route("/order_made", methods=['POST'])
@@ -1187,3 +1208,6 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+
