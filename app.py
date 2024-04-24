@@ -105,7 +105,7 @@ def home():
     '''
     redirect user to index.html ie sign-in page
     '''
-    return redirect(url_for('index'))
+    return redirect(url_for('homepage'))
 
 
 @app.route("/index.html")
@@ -133,8 +133,9 @@ def get_user_image():
     filename = 'templates/assets/user.png'  # Path to your image file
     return send_file(filename, mimetype='image/png')
 
-
-
+@app.route("/adminpage.html")
+def adminpage():
+    return render_template("adminpage.html")
 
 
 @app.route("/order_made", methods=['POST'])
@@ -379,6 +380,10 @@ def login():
         # login failed
         flash("Login failed, please try again")
         return redirect(url_for('index'))
+    elif user_info['U_account'] == 'cian':
+        # admin login
+        session['user_info'] = dict(user_info)
+        return redirect(url_for('adminpage'))
     else:
         # login successfully
         session['user_info'] = dict(user_info)

@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Quisite</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="A ordering system By 12 - Einstein" />
+	<meta name="keywords" content="A ordering system By 12 - Einstein" />
+	<meta name="author" content="" />
+
+	
+
+	<!-- Facebook and Twitter integration -->
+	<meta property="og:title" content="" />
+	<meta property="og:image" content="" />
+	<meta property="og:url" content="" />
+	<meta property="og:site_name" content="" />
+	<meta property="og:description" content="" />
+	<meta name="twitter:title" content="" />
+	<meta name="twitter:image" content="" />
+	<meta name="twitter:url" content="" />
+	<meta name="twitter:card" content="" />
+
+	<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+	<link rel="shortcut icon" href="favicon.ico">
+
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,300' rel='stylesheet' type='text/css'>
+
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/animate.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+
+	<!-- Modernizr JS -->
+	<script src="{{ url_for('static', filename='js/modernizr-2.6.2.min.js') }}"></script>
+	<!-- FOR IE9 below -->
+	<!--[if lt IE 9]>
+	<script src="js/respond.min.js"></script>
+	<![endif]-->
+
+</head>
+
+<body>
+    <!-- Nav -->
+  <div class="navbar_home">
+    <div class="row">
+        <div class="col-md-6">
+            <a href="homepage.html" class="poppins-medium branding__title btn__standard" >
+                QUISITE
+            </a>
+        </div>
+        <div class="col-md-6" style="text-align: right">
+            <div>
+                <a href="#" class="btn__standard" style="margin-right: 10px">
+                    <img src="{{ url_for('get_search_image') }}" style="width: 20px" />
+                </a>
+                <a href="index.html" class="btn__standard">
+                    <img src="{{ url_for('get_user_image') }}" style="width: 20px" />
+                </a>
+              </div>
+        </div>
+    </div>
+  </div>
+
+<div style="float:right">
+  <form align="right" name="form1" method="post" action="{{url_for('logout')}}">
+    <label class="logoutLblPos">
+      <input name="Logout" type="submit" style="margin-left: 5px;" class=" btn btn-info " id="Logout" value="Logout">
+    </label>
+  </form>
+</div>
+<div class="container">
+<div class="container">
+
+  <ul class="nav nav-tabs">
+    <li><a href="#Shop">Shops</a></li>
+    <li><a href="#ShopOrder" onclick="searchShopOrders()">Shop Orders</a></li>
+    <li><a href="#TsRecord" onclick="searchTransactionRecord()">Transaction Records</a></li>
+  </ul>
+
+  <div class="tab-content">
+  
+    <!-- ADDING REGISTER FOR STORE HERE -->
+
+    <!-- Shop Orders -->
+    <div id="ShopOrder" class="tab-pane fade">
+      <h3>Shop Orders</h3>
+      <select class="form-control" name="Status" id="shop-order-status" style="width:150px; "
+        onchange="updateShopOrderTable()">
+        <option>All</option>
+        <option>Finished</option>
+        <option>Not finished</option>
+        <option>Canceled</option>
+      </select>
+      <div class="row">
+        <div class="col-xs-8" id="ShopOrder-table">
+          <table class="table" style="margin-top: 15px;">
+            <thead>
+              <tr>
+                <th scope="col">Order ID</th>
+                <th scope="col">Status</th>
+                <th scope="col">Start Time</th>
+                <th scope="col">End Time</th>
+                <th scope="col">Shop Name</th>
+                <th scope="col">Total Price</th>
+                <th scope="col">Order Details</th>
+                <th scope="col">Action</th>
+                <th scope="col">Select</th>
+              </tr>
+            </thead>
+            <tbody id="ShopOrder-update">
+              <!-- for loop1 should start here -->
+              <tr>
+                <th scope="row">1</th>
+                <td>
+                  tmp2
+                </td>
+                <td>
+                  tmp3
+                </td>
+                <td>
+                  tmp4
+                </td>
+                <td>
+                  tmp5
+                </td>
+                <td>
+                  tmp6
+                </td>
+                <td>
+                  <button type="button" data-toggle="modal" data-target="#ShopOrderDetail-1"
+                    class="btn btn-info ">Order Details</button>
+                </td>
+                <td>
+                  <button type="button" data-toggle="modal" data-target="test" name="test" class="btn btn-success "
+                    onclick="none">Done</button>
+                  <button type="button" data-toggle="modal" data-target="test" name="test" class="btn btn-danger "
+                    onclick="none">Cancel</button>
+                </td>
+              </tr>
+              <!-- for loop1 should end here -->
+            </tbody>
+          </table>
+          <div>
+            <button type="button" name="empty" class="btn btn-danger " onclick="batchDeleteShopOrder()">Cancel Seleted
+              Orders</button>
+            <button type="button" name="empty" class="btn btn-success " onclick="batchCompleteShopOrder()">Complete
+              Seleted Orders</button>
+          </div>
+          <!-- for loop2 should start here -->
+          <!-- Modal: ShopOrderDetail-{id} -->
+          <div class="modal fade" id="ShopOrderDetail-1" data-backdrop="static" tabindex="-1" role="dialog"
+            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Order Details</h4>
+                </div>
+                <div class="modal-body">
+                  <table class="table">
+                    <thread>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Picture</th>
+                        <th scope="col">Meal name</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Quantity</th>
+                      </tr>
+                    </thread>
+                    <tbody id="ShopOrderDetail-T-1">
+                      <tr>
+                        <th scope="row">1</th>
+                        <td>tmp11</td>
+                        <td>tmp12</td>
+                        <td>tmp13</td>
+                        <td>tmp14</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">2</th>
+                        <td>tmp21</td>
+                        <td>tmp22</td>
+                        <td>tmp23</td>
+                        <td>tmp24</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <!-- EX: row['subtotal'] -->
+                  <!-- <p class="text-right">Subtotal $200</p>
+                  <p class="text-right"><small><em>Delivery fee $0</em></small></p>
+                  <p class="text-right">Total Price $200</p> -->
+                  <div class="modal-footer">
+                    <p class="text-right" id="Subtotal"></p>
+                    <p class="text-right" id="Delivery_fee"></p>
+                    <p class="text-right" id="Total_price"></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- for loop2 should end here -->
+        </div>
+      </div>
+      <script type="text/javascript">
+        function completeShopOrder(oid) {
+          // implement your order complete function
+          // !!! careful, use parseInt(OID) here since OID is str
+          OID = parseInt(oid);
+          $.ajax({
+            url: 'http://' + window.location.host + '/order-complete',
+            type: 'POST',
+            data: { 'OID': OID },
+            dataType: 'json',
+            success: function (result) {
+              alert(result.msg);
+            },
+            error: function (jqxhr, textStatus, errorThrown) {
+              alert(jqxhr.responseText)
+            }
+          })
+          // and refresh order table
+          searchShopOrders();
+        }
+        function cancelShopOrder(oid) {
+          // implement your order cancel function
+          // !!! careful, use parseInt(OID) here since OID is str
+          OID = parseInt(oid);
+          $.ajax({
+            url: 'http://' + window.location.host + '/order-delete',
+            type: 'POST',
+            data: { 'OID': OID, 'is_shopowner': true },
+            dataType: 'json',
+            success: function (result) {
+              alert(result.msg);
+            },
+            error: function (jqxhr, textStatus, errorThrown) {
+              alert(jqxhr.responseText)
+            }
+          })
+          // and refresh order table
+          searchShopOrders();
+        }
+        function updateShopOrderDetail(OID) {
+          $.ajax({
+            url: 'http://' + window.location.host + "/order-detail",
+            method: "POST",
+            data: { 'OID': parseInt(OID), 'UID': parseInt(UID) },
+            async: false,
+            success: function (Order_info) {
+              body = ""
+              var Products = Order_info.Products
+              for (let i = 0; i < Products.length; i++) {
+                p = Products[i]
+                body += "<tr>"
+                body += `<th scope="row">${i + 1}</th>`
+                body += `<td><img src="data:image/${p.P_imagetype};base64, ${atob(p.P_image)}" style="width: 72px; height: 72px;"></td>
+                          <td>${p.P_name}</td>
+                          <td>${p.P_price}</td>
+                          <td>${p.Order_quantity}</td>`
+                body += "</tr>"
+              }
+              $('#ShopOrderDetail-1 #ShopOrderDetail-T-1').html(body);
+              $('#ShopOrderDetail-1 #Subtotal').html(`Subtotal $${Order_info.Subtotal}`)
+              $('#ShopOrderDetail-1 #Delivery_fee').html(`<small><em>Delivery fee $${Order_info.Delivery_fee}</small></em>`)
+              $('#ShopOrderDetail-1 #Total_price').html(`Total Price $${Order_info.Delivery_fee + Order_info.Subtotal}`)
+            },
+            error: function (jqxhr, textStatus, errorThrown) {
+              alert(jqxhr.responseText)
+            }
+          })
+        }
+        function batchCompleteShopOrder() {
+          all_succ = true;
+          has_select = false;
+          $('#ShopOrder-table').find('input:checked').each(function () {
+            has_select = true;
+            OID = parseInt($(this).attr('name'))
+            $.ajax({
+              url: 'http://' + window.location.host + '/order-complete',
+              type: 'POST',
+              async: false,
+              data: { 'OID': OID },
+              dataType: 'json',
+              success: function (result) {
+                console.log(result.msg);
+              },
+              error: function (jqxhr, textStatus, errorThrown) {
+                all_succ = false;
+                alert(jqxhr.responseText);
+              }
+            })
+          });
+          if (all_succ && has_select) {
+            alert('Seleted orders completed successfully');
+          }
+          searchShopOrders()
+        }
+        function batchDeleteShopOrder() {
+          all_succ = true;
+          has_select = false;
+          $('#ShopOrder-table').find('input:checked').each(function () {
+            has_select = true;
+            OID = parseInt($(this).attr('name'))
+            $.ajax({
+              url: 'http://' + window.location.host + '/order-delete',
+              type: 'POST',
+              async: false,
+              data: { 'OID': OID, 'is_shopowner': true },
+              dataType: 'json',
+              success: function (result) {
+                console.log(result.msg);
+              },
+              error: function (jqxhr, textStatus, errorThrown) {
+                all_succ = false;
+                alert(jqxhr.responseText);
+              }
+            })
+          });
+          if (all_succ && has_select) {
+            alert('Seleted orders canceled successfully');
+          }
+          searchShopOrders()
+        }
+        ShopOrders = [];
+        function updateShopOrderTable() {
+          var table = '', filter = document.getElementById("shop-order-status").value;
+          $.each(ShopOrders, function (i, order) {
+            if (filter != 'All' && order.Status != filter) { return; }
+            table += '<tr><th scope="row">' + order.OID + '</th>';
+            table += '<td>' + order.Status + '</td>';
+            table += '<td>' + order.start_time + '</td>';
+            table += '<td>' + order.end_time + '</td>';
+            table += '<td>' + order.S_name + '</td>';
+            table += '<td>' + order.total_price + '</td>';
+            table += `
+              <td>
+                <button type="button" name="${order.OID}" data-toggle="modal" data-target="#ShopOrderDetail-1" class="btn btn-info " 
+                onclick="updateShopOrderDetail(this.name)"> Order Details</button>
+              </td>`;
+            if (order.Status == 'Not finished') {
+              table += `
+              <td>
+                <button type="button" name="${order.OID}" data-toggle="modal" class="btn btn-success " 
+                onclick="completeShopOrder(this.name)"> Done</button>
+                <button type="button" name="${order.OID}" data-toggle="modal" class="btn btn-danger " 
+                onclick="cancelShopOrder(this.name)"> Cancel</button>
+              </td>
+              <td>
+                <input type="checkbox" class="form-check-input" name="${order.OID}">
+              </td></tr>`
+            } else {
+              table += '<td></td><td></td></tr>'
+            }
+          });
+          $("#ShopOrder-update").html(table);
+        }
+        function searchShopOrders() {
+          $.ajax({
+            url: 'http://' + window.location.host + "/search-ShopOrders",
+            method: "POST",
+            data: { 'UID': UID },
+            async: false,
+            success: function (data) {
+              ShopOrders = data.tableRow;
+              updateShopOrderTable();
+            },
+            error: function (jqxhr, textStatus, errorThrown) {
+              alert("error: " + textStatus)
+            }
+          })
+        }
+      </script>
+    </div>
+
+    <!-- Transacrion Records -->
+    <div id="TsRecord" class="tab-pane fade">
+      <h3>Transacrion Records</h3>
+      <select class="form-control" name="Status" id="transaction-status" style="width:150px; "
+        onchange="updateTransactionRecord()">
+        <option value="All">All</option>
+        <option value="Payment">Payment</option>
+        <option value="Recieve">Recieve</option>
+        <option value="Recharge">Recharge</option>
+      </select>
+      <div class="row">
+        <div class="col-xs-8">
+          <table class="table" style="margin-top: 15px;">
+            <thead>
+              <tr>
+                <th scope="col">Record ID</th>
+                <th scope="col">Action</th>
+                <th scope="col">Time</th>
+                <th scope="col">Trader</th>
+                <th scope="col">Amount</th>
+              </tr>
+            </thead>
+            <tbody id="transaction-update">
+              <tr>
+                <td>
+                  tmp1
+                </td>
+                <td>
+                  tmp2
+                </td>
+                <td>
+                  tmp3
+                </td>
+                <td>
+                  tmp4
+                </td>
+                <td>
+                  tmp5
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+      transactions = [];
+      function updateTransactionRecord() {
+        var table = '', filter = document.getElementById("transaction-status").value;
+        $.each(transactions, function (i, transaction) {
+          if (filter != 'All' && transaction.Action != filter) { return; }
+          table += '<tr><th scope="row">' + transaction.TID + '</th>';
+          table += '<td>' + transaction.Action + '</td>';
+          table += '<td>' + transaction.Time + '</td>';
+          table += '<td>' + transaction.Trader + '</td>';
+          table += '<td>' + transaction.T_amount + '</td></tr>';
+        });
+        $("#transaction-update").html(table);
+      }
+      function searchTransactionRecord() {
+        $.ajax({
+          url: 'http://' + window.location.host + "/search-transactionRecord",
+          type: "POST",
+          data: { 'UID': UID },
+          async: false,
+          success: function (data) {
+            transactions = data.tableRow
+            updateTransactionRecord();
+          },
+          error: function (jqxhr, textStatus, errorThrown) {
+            alert("error: " + textStatus)
+          }
+        })
+      }
+    </script>
+
+  </div>
+</div>
+
+	<!-- jQuery -->
+	<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+	<!-- Bootstrap -->
+	<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+	<!-- Placeholder -->
+	<script src="{{ url_for('static', filename='js/jquery.placeholder.min.js') }}"></script>
+	<!-- Waypoints -->
+	<script src="{{ url_for('static', filename='js/jquery.waypoints.min.js') }}"></script>
+	<!-- Main JS -->
+	<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+
+</body>
+
+</html>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+  
+  .poppins-thin {
+    font-family: "Poppins", sans-serif;
+    font-weight: 100;
+    font-style: normal;
+  }
+  
+  .poppins-extralight {
+    font-family: "Poppins", sans-serif;
+    font-weight: 200;
+    font-style: normal;
+  }
+  
+  .poppins-light {
+    font-family: "Poppins", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+  }
+  
+  .poppins-regular {
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+  }
+  
+  .poppins-medium {
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+  }
+  
+  .poppins-semibold {
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    font-style: normal;
+  }
+  
+  .poppins-bold {
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+  }
+  
+  .poppins-extrabold {
+    font-family: "Poppins", sans-serif;
+    font-weight: 800;
+    font-style: normal;
+  }
+  
+  .poppins-black {
+    font-family: "Poppins", sans-serif;
+    font-weight: 900;
+    font-style: normal;
+  }
+  
+  .poppins-thin-italic {
+    font-family: "Poppins", sans-serif;
+    font-weight: 100;
+    font-style: italic;
+  }
+  
+  .poppins-extralight-italic {
+    font-family: "Poppins", sans-serif;
+    font-weight: 200;
+    font-style: italic;
+  }
+  
+  .poppins-light-italic {
+    font-family: "Poppins", sans-serif;
+    font-weight: 300;
+    font-style: italic;
+  }
+  
+  .poppins-regular-italic {
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    font-style: italic;
+  }
+  
+  .poppins-medium-italic {
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-style: italic;
+  }
+  
+  .poppins-semibold-italic {
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    font-style: italic;
+  }
+  
+  .poppins-bold-italic {
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+    font-style: italic;
+  }
+  
+  .poppins-extrabold-italic {
+    font-family: "Poppins", sans-serif;
+    font-weight: 800;
+    font-style: italic;
+  }
+  
+  .poppins-black-italic {
+    font-family: "Poppins", sans-serif;
+    font-weight: 900;
+    font-style: italic;
+  }
+  
+  
+  .navbar_home {
+      background: #800000;
+      padding: 20px 100px;
+  }
+  .branding__title {
+      color: white;
+  }
+  .branding__title:hover {
+      color: white;
+  }
+  .btn__standard:hover {
+      text-decoration: none;
+      cursor: pointer;
+  }
+  
+  .bg-frntpage {
+      background: linear-gradient(#9B9B9B 20%, #ED3B3B);
+      height: 100vh;
+      padding: 50px 100px
+  }
+  .btn-joinnow {
+      background: #800000;
+      color: white;
+      padding: 5px 80px;
+  }
+  .btn-login {
+      background: transparent;
+      color: white;
+      border: 1px solid #020202;
+      padding: 5px 80px;
+  }
+  </style>
