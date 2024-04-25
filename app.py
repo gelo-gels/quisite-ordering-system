@@ -125,12 +125,17 @@ def homepage():
 # Route to serve image file
 @app.route('/search')
 def get_search_image():
-    filename = 'templates/assets/search.png'  # Path to your image file
+    filename = 'templates/assets/search.png' # Path to your image file
     return send_file(filename, mimetype='image/png')
 
 @app.route('/user')
 def get_user_image():
     filename = 'templates/assets/user.png'  # Path to your image file
+    return send_file(filename, mimetype='image/png')
+
+@app.route('/logo')
+def get_logo_image():
+    filename = 'templates/assets/logo.png'  # Path to your image file
     return send_file(filename, mimetype='image/png')
 
 @app.route("/adminpage.html")
