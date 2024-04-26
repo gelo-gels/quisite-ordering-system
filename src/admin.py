@@ -276,20 +276,20 @@ def edit_price_and_quantity():
     for k, v in request.form.items():
         if v == '':
             flash(f"Please check: '{k}' is not filled")
-            return redirect(url_for("main.nav"))
+            return redirect(url_for("main.adminpage"))
 
     try:
         int(edit_price)
         int(edit_quantity)
     except ValueError:
         flash("Invalid Value")
-        return redirect(url_for("main.nav"))
+        return redirect(url_for("main.adminpage"))
 
     # check formats:
     # price and quantity
     if(int(edit_price) < 0 or int(edit_quantity) < 0):
         flash("Please check: price and quantity can only be non-negatives")
-        return redirect(url_for("main.nav"))
+        return redirect(url_for("main.adminpage"))
 
     # update price & quantity
     db = get_db()
@@ -301,7 +301,7 @@ def edit_price_and_quantity():
     db.commit()
 
     flash("Edit Successful")
-    return redirect(url_for('main.nav'))
+    return redirect(url_for('main.adminpage'))
 
 
 @manager.route("/delete_product", methods=['POST'])
@@ -317,7 +317,7 @@ def delete_product():
     db.commit()
 
     flash("Delete Successful")
-    return redirect(url_for('main.nav'))
+    return redirect(url_for('main.adminpage'))
 
 
 #BELOW THIS LINE ARE REDUNDANT FUNCTIONS
@@ -338,7 +338,7 @@ def shop_register():
     for k, v in request.form.items():
         if v == '':
             flash(f"Please check: '{k}' is not filled")
-            return redirect(url_for("main.nav"))
+            return redirect(url_for("main.adminpage"))
 
     # check formats:
     # latitude and longitude
@@ -347,23 +347,23 @@ def shop_register():
     #     longitude = float(shop_longitude)
     # except ValueError:
     #     flash("Please check: locations can only be float")
-    #     return redirect(url_for("main.nav"))
+    #     return redirect(url_for("main.adminpage"))
 
     # if not (-90 <= latitude <= 90 and -180 <= longitude <= 180):
     #     flash("Please check: locations not possible")
-    #     return redirect(url_for("main.nav"))
+    #     return redirect(url_for("main.adminpage"))
 
     # store newly registered store informations
     db = get_db()
     try:
         shop_info = db.cursor().execute('''
-            insert into Stores (S_name, S_latitude, S_longitude, S_phone, S_foodtype, S_owner)
-            values (?, ?, ?, ?, ?, ?)
-        ''', (shop_name, longitude, owner_phone, shop_category, UID))
+            insert into Stores (S_name, S_phone, S_foodtype, S_owner)
+            values (?, ?, ?, ?)
+        ''', (shop_name, owner_phone, shop_category, UID))
         # print(shop_name, latitude, longitude, owner_phone, shop_category, UID)
     except sqlite3.IntegrityError:
         flash("shop name has been registered !!")
-        return redirect(url_for("main.nav"))
+        return redirect(url_for("main.adminpage"))
     session['shop_info'] = dict(shop_info)
     db.commit()
 
@@ -377,13 +377,13 @@ def shop_register():
         ''', (1, UID))
     except sqlite3.IntegrityError:
         flash("show owner update failed")
-        return redirect(url_for("main.nav"))
+        return redirect(url_for("main.adminpage"))
     # session['user_info'] = dict(user_info)
     db.commit()
 
     # Register successfully
     flash("Shop registered successfully")
-    return redirect(url_for("main.nav"))
+    return redirect(url_for("main.adminpage"))
 
 
 @manager.route("/register-shop_name-check", methods=['POST'])
@@ -429,7 +429,7 @@ def shop_add():
     # check if user is owner
     if(user_info['U_type'] == 0):
         flash("Please register your store first")
-        return redirect(url_for("main.nav"))
+        return redirect(url_for("main.adminpage"))
 
     # fetch shop_info
     db = get_db()
@@ -444,10 +444,10 @@ def shop_add():
     for k, v in request.form.items():
         if v == '':
             flash(f"Please check: '{k}' is not filled")
-            return redirect(url_for("main.nav"))
+            return redirect(url_for("main.adminpage"))
     if(meal_pic.filename == ''):
         flash("Please upload a picture for the product")
-        return redirect(url_for("main.nav"))
+        return redirect(url_for("main.adminpage"))
 
     # get the extension of the file ex: png, jpeg
     meal_pic_extension = meal_pic.filename.split('.')[1]
@@ -456,7 +456,7 @@ def shop_add():
     # price and quantity
     if(int(meal_price) < 0 or int(meal_quantity) < 0):
         flash("Please check: price and quantity can only be non-negatives")
-        return redirect(url_for("main.nav"))
+        return redirect(url_for("main.adminpage"))
 
     # store newly added product informations
     db = get_db()
@@ -468,10 +468,10 @@ def shop_add():
     except sqlite3.IntegrityError:
         # print("something went wrong!!")
         flash(" oops something went wrong!!")
-        return redirect(url_for("main.nav"))
+        return redirect(url_for("main.adminpage"))
     # session['product_info'] = dict(product_info)       # not sure if needed
     db.commit()
 
     # Register successfully
     flash("Product added successfully")
-    return redirect(url_for("main.nav"))
+    return redirect(url_for("main.adminpage"))

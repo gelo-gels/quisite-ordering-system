@@ -2,7 +2,7 @@ import base64
 import json
 from .login import login_required
 from .math import distance_between_locations
-from . import get_db, DISTANCE_BOUNDARY
+from . import get_db
 from flask import (
     Blueprint, request,
     session, redirect, url_for,
@@ -91,11 +91,11 @@ def order_made():
 
     # Delivery_fee = 0 if json_data['Type'] == '0' else max(
     #     int(round(distance * 10)), 10)
-    # Total = Subtotal + Delivery_fee
-    # if Total > user_info['U_balance']:
-    #     return jsonify({
-    #         'message': "Failed to create order: insufficient balance"
-    #     }), 200
+    Total = Subtotal
+    if Total > user_info['U_balance']:
+        return jsonify({
+            'message': "Failed to create order: insufficient balance"
+        }), 200
 
     # create successful, update database
     try:
