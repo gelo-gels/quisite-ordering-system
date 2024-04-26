@@ -73,8 +73,8 @@
     <!-- Content -->
     <div class="bg-frntpage">
         <div class="row">
-            <div class="col-sm-6 col-md-6">
-                <div class="poppins-extrabold" style="font-size: 60px; color: #202020; line-height: 1; margin-bottom: 50px;">
+            <div class="col-sm-6 col-md-6 animate-box" data-animate-effect="fadeInLeft">
+                <div class="poppins-extrabold" style="font-size: 60px; color: #202020; line-height: 1; margin-bottom: 50px;" >
                     PURCHASE WITHOUT HESITATION
                 </div>
                 <div style="width: 300px">
@@ -100,14 +100,14 @@
                   </div>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6 animate-box" data-animate-effect="fadeInRight">
               <img src="{{ url_for('get_logo_image') }}" style="width: 450px" />
             </div>
         </div>
     </div>
 
     <div class="bg-scndpage">
-      <div class="row" style="padding: 50px 100px">
+      <div class="row animate-box" style="padding: 50px 100px" data-animate-effect="fadeInUp">
         <div class="col-md-2">
           <img src="{{ url_for('get_borger_image') }}" style="width: 200px; height: 200px; object-fit: cover; border-radius: 10px" />
         </div>
@@ -149,132 +149,6 @@
 </html>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-
-.poppins-thin {
-  font-family: "Poppins", sans-serif;
-  font-weight: 100;
-  font-style: normal;
-}
-
-.poppins-extralight {
-  font-family: "Poppins", sans-serif;
-  font-weight: 200;
-  font-style: normal;
-}
-
-.poppins-light {
-  font-family: "Poppins", sans-serif;
-  font-weight: 300;
-  font-style: normal;
-}
-
-.poppins-regular {
-  font-family: "Poppins", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-}
-
-.poppins-medium {
-  font-family: "Poppins", sans-serif;
-  font-weight: 500;
-  font-style: normal;
-}
-
-.poppins-semibold {
-  font-family: "Poppins", sans-serif;
-  font-weight: 600;
-  font-style: normal;
-}
-
-.poppins-bold {
-  font-family: "Poppins", sans-serif;
-  font-weight: 700;
-  font-style: normal;
-}
-
-.poppins-extrabold {
-  font-family: "Poppins", sans-serif;
-  font-weight: 800;
-  font-style: normal;
-}
-
-.poppins-black {
-  font-family: "Poppins", sans-serif;
-  font-weight: 900;
-  font-style: normal;
-}
-
-.poppins-thin-italic {
-  font-family: "Poppins", sans-serif;
-  font-weight: 100;
-  font-style: italic;
-}
-
-.poppins-extralight-italic {
-  font-family: "Poppins", sans-serif;
-  font-weight: 200;
-  font-style: italic;
-}
-
-.poppins-light-italic {
-  font-family: "Poppins", sans-serif;
-  font-weight: 300;
-  font-style: italic;
-}
-
-.poppins-regular-italic {
-  font-family: "Poppins", sans-serif;
-  font-weight: 400;
-  font-style: italic;
-}
-
-.poppins-medium-italic {
-  font-family: "Poppins", sans-serif;
-  font-weight: 500;
-  font-style: italic;
-}
-
-.poppins-semibold-italic {
-  font-family: "Poppins", sans-serif;
-  font-weight: 600;
-  font-style: italic;
-}
-
-.poppins-bold-italic {
-  font-family: "Poppins", sans-serif;
-  font-weight: 700;
-  font-style: italic;
-}
-
-.poppins-extrabold-italic {
-  font-family: "Poppins", sans-serif;
-  font-weight: 800;
-  font-style: italic;
-}
-
-.poppins-black-italic {
-  font-family: "Poppins", sans-serif;
-  font-weight: 900;
-  font-style: italic;
-}
-
-
-.navbar_home {
-    background: #800000;
-    padding: 20px 100px;
-}
-.branding__title {
-    color: white;
-}
-.branding__title:hover {
-    color: white;
-}
-.btn__standard:hover {
-    text-decoration: none;
-    cursor: pointer;
-}
-
 .bg-frntpage {
     background: linear-gradient(#9B9B9B 70%, #ED3B3B);
     height: 600px;

@@ -59,7 +59,33 @@
 
 <body>
 
-	<div class="container">
+	<!-- Nav -->
+	<div class="navbar_home">
+        <div class="row">
+            <div class="col-md-6">
+                <a href="homepage.html" class="poppins-medium branding__title btn__standard" >
+                    QUISITE
+                </a>
+            </div>
+            <div class="col-md-6" style="text-align: right">
+                <div>
+                    <a href="#" class="btn__standard" style="margin-right: 10px">
+                        <img src="{{ url_for('get_search_image') }}" style="width: 20px" />
+                    </a>
+                    <a href="index.html" class="btn__standard">
+                        <img src="{{ url_for('get_user_image') }}" style="width: 20px" />
+                    </a>
+                </div>
+            </div>
+        </div>
+	</div>
+
+	<!-- Return home BTN -->
+	<div style="margin-top: 20px; margin-left: 20px; position: absolute;">
+		<a style="padding: 10px 20px; background: #800000; color: white; text-decoration: none;" class="poppins-regular" href="homepage.html">&#x21a9; Return to home</a>
+	</div>
+
+	<div class="container" style="margin-bottom: 50px;">
 
 		<div class="row">
 			<div class="col-md-4 col-md-offset-4">
@@ -68,7 +94,7 @@
 				<!-- Start Sign In Form -->
 				<form action="register" method="post" id="register" class="fh5co-form animate-box"
 					data-animate-effect="fadeIn">
-					<h2>Sign Up</h2>
+					<h2 class="poppins-bold" style="text-align: center;">Sign Up</h2>
 					<!-- <div class="form-group">
 							<div class="alert alert-success" role="alert">Your info has been saved.</div>
 						</div> -->
@@ -83,47 +109,47 @@
 					{% endwith %}
 					{% block body %}{% endblock %}
 					<div class="form-group">
-						<label for="name" class="sr-only">Name</label>
-						<input type="text" class="form-control" id="name" name="name" placeholder="Name"
+						<label for="name" class="sr-only poppins-regular">Name</label>
+						<input type="text" class="form-control poppins-regular" id="name" name="name" placeholder="Name"
 							autocomplete="off">
 					</div>
 					<div class="form-group">
-						<label for="name" class="sr-only">phonenumber</label>
-						<input type="text" class="form-control" id="phonenumber" name="phonenumber"
-							placeholder="PhoneNumber" autocomplete="off">
+						<label for="name" class="sr-only poppins-regular">phone number</label>
+						<input type="text" class="form-control poppins-regular" id="phonenumber" name="phonenumber"
+							placeholder="Phone Number" autocomplete="off">
 					</div>
 					<div class="form-group">
-						<label for="Account" class="sr-only">Account</label>
-						<input type="text" class="form-control" id="Account" name="Account" placeholder="Account"
+						<label for="Account" class="sr-only poppins-regular">User name</label>
+						<input type="text" class="form-control poppins-regular" id="Account" name="Account" placeholder="User Name"
 							autocomplete="off">
 						<div id="msg"></div>
 					</div>
 					<div class="form-group">
-						<label for="password" class="sr-only">Password</label>
-						<input type="password" class="form-control" id="password" name="password" placeholder="Password"
+						<label for="password" class="sr-only poppins-regular">Password</label>
+						<input type="password" class="form-control poppins-regular" id="password" name="password" placeholder="Password"
 							autocomplete="off">
 					</div>
 					<div class="form-group">
-						<label for="re-password" class="sr-only">Re-type Password</label>
-						<input type="password" class="form-control" id="re-password" name="re-password"
+						<label for="re-password" class="sr-only poppins-regular">Re-type Password</label>
+						<input type="password" class="form-control poppins-regular" id="re-password" name="re-password"
 							placeholder="Re-type Password" autocomplete="off">
 					</div>
 					<div class="form-group">
-						<label for="latitude" class="sr-only">latitude</label>
-						<input type="text" class="form-control" id="latitude" name="latitude" placeholder="Latitude"
+						<label for="latitude" class="sr-only poppins-regular">latitude</label>
+						<input type="text" class="form-control poppins-regular" id="latitude" name="latitude" placeholder="Latitude"
 							autocomplete="off">
 					</div>
 					<div class="form-group">
-						<label for="longitude" class="sr-only">longitude</label>
-						<input type="text" class="form-control" id="longitude" name="longitude" placeholder="longitude"
+						<label for="longitude" class="sr-only poppins-regular">longitude</label>
+						<input type="text" class="form-control poppins-regular" id="longitude" name="longitude" placeholder="longitude"
 							autocomplete="off">
 					</div>
 
-					<div class="form-group">
+					<div class="form-group poppins-regular">
 						<p>Already registered? <a href="index.html">Sign In</a></p>
 					</div>
-					<div class="form-group">
-						<input type="submit" value="Sign Up" class="btn btn-primary">
+					<div class="form-group poppins-regular">
+						<input type="submit" value="Sign Up" style="width: 100%; background: #800000; color: white; padding: 10px 0px" class="btn">
 					</div>
 
 				</form>
@@ -148,12 +174,6 @@
 					});
 				});
 			</script>
-		</div>
-		<div class="row" style="padding-top: 60px; clear: both;">
-			<div class="col-md-12 text-center">
-				<p><small>&copy; All Rights Reserved. Designed by <a
-							href="https://freehtml5.co">FreeHTML5.co</a></small></p>
-			</div>
 		</div>
 	</div>
 
