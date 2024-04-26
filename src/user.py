@@ -2,7 +2,7 @@ import base64
 import json
 from .login import login_required
 from .math import distance_between_locations
-from . import get_db
+from . import get_db, DISTANCE_BOUNDARY
 from flask import (
     Blueprint, request,
     session, redirect, url_for,
@@ -91,11 +91,11 @@ def order_made():
 
     # Delivery_fee = 0 if json_data['Type'] == '0' else max(
     #     int(round(distance * 10)), 10)
-    Total = Subtotal
-    if Total > user_info['U_balance']:
-        return jsonify({
-            'message': "Failed to create order: insufficient balance"
-        }), 200
+    # Total = Subtotal + Delivery_fee
+    # if Total > user_info['U_balance']:
+    #     return jsonify({
+    #         'message': "Failed to create order: insufficient balance"
+    #     }), 200
 
     # create successful, update database
     try:
@@ -121,8 +121,8 @@ def order_made():
             # 'Delivery_fee': Delivery_fee,
         })
         rst = db.cursor().execute('''
-            insert into Orders (O_status, O_end_time, O_amount, O_type, O_details, SID)
-            values (?, ?, ?, ?, ?, ?)
+            insert into Orders (O_status, O_end_time, O_distance, O_amount, O_type, O_details, SID)
+            values (?, ?, ?, ?, ?, ?, ?)
         ''', (0, None, Total, json_data['Type'], details_str, SID))
             #  (0, None, distance, Total, json_data['Type'], details_str, SID))
 
@@ -253,21 +253,22 @@ def search_menu(SID, upper, lower, meal):
 @costumer.route("/search-shops", methods=['POST'])
 def search_shops():
     search = {i: request.form[i] for i in [
-        'shop', 'sel1', 'price_low', 'price_high', 'meal', 'category']}
+        'price_low', 'price_high', 'meal']}
     desc = 'desc' if request.form["desc"] == 'true' else ''
-    
     db = get_db()
     rst = db.cursor().execute(
-        f'''
+        '''
         SELECT SID, S_name, S_foodtype
         FROM Stores
-        WHERE INSTR(LOWER(S_name), LOWER(:shop)) > 0
-        AND INSTR(LOWER(S_foodtype), LOWER(:category)) > 0
-        ORDER BY {request.form['ordering']}
-        ''' + desc,
+        ''',
         search
     ).fetchall()
-    
+
+    # Optionally, you can order the results here in Python
+    # based on a specific criterion, for example, shop name.
+    # You can replace this with your desired ordering logic.
+    rst = sorted(rst, key=lambda x: x[1], reverse=(desc == 'desc'))
+
     table = {'tableRow': []}
     append = table['tableRow'].append
     for SID, S_name, S_foodtype in rst:
@@ -280,6 +281,8 @@ def search_shops():
     response.headers.add('Access-Control-Allow-Origin', '*')
     response.status_code = 200
     return response
+
+
 
 
 @costumer.route("/order-detail", methods=['POST'])

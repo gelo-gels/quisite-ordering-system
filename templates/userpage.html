@@ -116,19 +116,43 @@
         <h3>Search</h3>
         <div class=" row  col-xs-8">
           <form class="form-horizontal" action="/action_page.php" method="post" id="search_form">
+            
+            <!-- TEMPORARY FIX -->
+            <div class="form-group" style="visibility: hidden; position: absolute;">
+
+              <label class="control-label col-sm-1" for="Price">Price</label>
+              <div class="col-sm-2">
+
+                <input type="number" class="form-control" name="price_low" placeholder="0">
+
+              </div>
+              <label class="control-label col-sm-1" for="~">~</label>
+              <div class="col-sm-2">
+
+                <input type="number" class="form-control" name="price_high" placeholder="∞">
+
+              </div>
+              
+            </div>
 
             <div class="form-group">
-
-              <label class="control-label col-sm-1" for="Meal">Meal</label>
+                <label class="control-label col-sm-1" for="Meal">Meal</label>
               <div class="col-sm-5">
                 <input type="text" class="form-control" name="meal" placeholder="Enter Meal">
               </div>
             </div>
 
-            <div class="form-group">
-              <button type="submit" style="margin-left: 18px;" class="btn btn-primary">Search</button>
+            <!-- TEMPORARY FIX -->
+            <div class="form-group" style="visibility: hidden; position: absolute;">
+              <label class="control-label col-sm-1" for="desc order">desc order</label>
+              <div class="col-sm-5">
+                <input type="checkbox" class="form-check-input" id="desc">
+              </div>
             </div>
-            
+
+            <div class="form-group">
+                <button type="submit" style="margin-left: 18px;" class="btn btn-primary">Search</button>
+            </div>
           </form>
           <script type="text/javascript">
             // var lat = 0.0, lon = 0.0;
