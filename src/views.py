@@ -32,48 +32,48 @@ def homepage():
 # Route to serve image file
 @main.route('/search')
 def get_search_image():
-    filename = '../templates/assets/search.png/' # Path to your image file
+    filename = '../templates/assets/search.png' # Path to your image file
     return send_file(filename, mimetype='image/png')
 
 @main.route('/user')
 def get_user_image():
-    filename = '../templates/assets/user.png/'  # Path to your image file
+    filename = '../templates/assets/user.png'  # Path to your image file
     return send_file(filename, mimetype='image/png')
 
 @main.route('/logo')
 def get_logo_image():
-    filename = '../templates/assets/logo.png/'  # Path to your image file
+    filename = '../templates/assets/logo.png'  # Path to your image file
     return send_file(filename, mimetype='image/png')
 
 # Food imgs
 @main.route('/borger')
 def get_borger_image():
-    filename = '../templates/assets/borger.jpg/'  # Path to your image file
+    filename = '../templates/assets/borger.jpg'  # Path to your image file
     return send_file(filename, mimetype='image/jpg')
 
 @main.route('/kakanin')
 def get_kakanin_image():
-    filename = '../templates/assets/kakanin.jpg/'  # Path to your image file
+    filename = '../templates/assets/kakanin.jpg'  # Path to your image file
     return send_file(filename, mimetype='image/jpg')
 
 @main.route('/mango-juice')
 def get_mangojuice_image():
-    filename = '../templates/assets/mangojuice.jpg/'  # Path to your image file
+    filename = '../templates/assets/mangojuice.jpg'  # Path to your image file
     return send_file(filename, mimetype='image/jpg')
 
 @main.route('/spag')
 def get_spag_image():
-    filename = '../templates/assets/spaghetti.jpg/'  # Path to your image file
+    filename = '../templates/assets/spaghetti.jpg'  # Path to your image file
     return send_file(filename, mimetype='image/jpg')
 
 @main.route('/tomi')
 def get_tomi_image():
-    filename = '../templates/assets/tomi.jpg/'  # Path to your image file
+    filename = '../templates/assets/tomi.jpg'  # Path to your image file
     return send_file(filename, mimetype='image/jpg')
 
 @main.route('/valuemeal')
 def get_valuemeal_image():
-    filename = '../templates/assets/valuemeal.jpg/'  # Path to your image file
+    filename = '../templates/assets/valuemeal.jpg'  # Path to your image file
     return send_file(filename, mimetype='image/jpg')
 
 
@@ -84,10 +84,37 @@ def adminpage():
 
 
 
+@main.route("/userpage.html")
+@login_required
+def userpage():
+    # update session info every time
+    user_info = session.get('user_info')
+    UID = user_info['UID']
+    db = get_db()
+    user_info = db.cursor().execute(
+        """ select *
+            from Users
+            where UID = ?""", (UID,)
+    ).fetchone()
+    session['user_info'] = dict(user_info)
 
+    # fetch shop_info
+    shop_info = db.cursor().execute(
+        """ select *
+            from Stores
+            where S_owner = ?""", (UID,)
+    ).fetchone()
 
+    # fetch product_info
+    product_info = db.cursor().execute(
+        """ select *
+            from Products
+            where P_owner = ?""", (UID,)
+    ).fetchall()
 
+    image_info = [tple['P_image'].decode("utf-8") for tple in product_info]
 
+    return render_template("userpage.html", user_info=user_info, shop_info=shop_info, product_info=product_info, image_info=image_info)
 
 
 

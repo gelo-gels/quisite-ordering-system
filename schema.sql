@@ -7,8 +7,8 @@ CREATE TABLE
         -- {First name}  {Last name}
         U_type INT NOT NULL,
         -- 0: Normal user, 1: Shop owner
-        U_latitude FLOAT NOT NULL,
-        U_longitude FLOAT NOT NULL,
+        -- U_latitude FLOAT NOT NULL,
+        -- U_longitude FLOAT NOT NULL,
         U_phone VARCHAR(10) NOT NULL,
         U_balance INT NOT NULL,
         -- constraints --
@@ -19,8 +19,8 @@ CREATE TABLE
     if NOT EXISTS Stores(
         SID INTEGER PRIMARY KEY AUTOINCREMENT,
         S_name VARCHAR(256) UNIQUE NOT NULL,
-        S_latitude FLOAT NOT NULL,
-        S_longitude FLOAT NOT NULL,
+        -- S_latitude FLOAT NOT NULL,
+        -- S_longitude FLOAT NOT NULL,
         S_phone VARCHAR(10) NOT NULL,
         S_foodtype VARCHAR(256) NOT NULL,
         S_owner INT NOT NULL,
@@ -36,7 +36,7 @@ CREATE TABLE
         -- insert current time using datetime('now', 'localtime')
         -- format: 'yyyy-mm-dd hh:mi:ss'
         O_end_time datetime,
-        O_distance FLOAT NOT NULL,
+        -- O_distance FLOAT NOT NULL,
         O_amount INT NOT NULL,
         -- total amount (could be removed)
         O_type INT NOT NULL,

@@ -50,7 +50,7 @@ def login():
     else:
         # login successfully
         session['user_info'] = dict(user_info)
-        return redirect(url_for('main.nav'))
+        return redirect(url_for('main.userpage'))
 
 @user.route("/logout", methods=['POST'])
 @login_required
@@ -101,8 +101,8 @@ def register():
     phonenumber = request.form['phonenumber']
     Account = request.form['Account']
     password = request.form['password']
-    latitude = request.form['latitude']
-    longitude = request.form['longitude']
+    # latitude = request.form['latitude']
+    # longitude = request.form['longitude']
 
     # check re-type password
     if password != request.form['re-password']:
@@ -144,15 +144,15 @@ def register():
             return redirect(url_for("main.sign_up"))
 
     # latitude and longitude
-    try:
-        latitude = float(latitude)
-        longitude = float(longitude)
-    except ValueError:
-        flash("Please check: locations can only be float")
-        return redirect(url_for("main.sign_up"))
-    if not (-90 <= latitude <= 90 and -180 <= longitude <= 180):
-        flash("Please check: latitude and longitude must be in range")
-        return redirect(url_for("main.sign_up"))
+    # try:
+    #     latitude = float(latitude)
+    #     longitude = float(longitude)
+    # except ValueError:
+    #     flash("Please check: locations can only be float")
+    #     return redirect(url_for("main.sign_up"))
+    # if not (-90 <= latitude <= 90 and -180 <= longitude <= 180):
+    #     flash("Please check: latitude and longitude must be in range")
+    #     return redirect(url_for("main.sign_up"))
 
     # hash password + salt (account) before storing it
     password = hashlib.sha256((password + Account).encode()).hexdigest()
@@ -161,9 +161,10 @@ def register():
     db = get_db()
     try:
         db.cursor().execute('''
-            insert into Users (U_account, U_password, U_name, U_type, U_latitude, U_longitude, U_phone, U_balance)
-            values (?, ?, ?, ?, ?, ?, ?, ?)
-        ''', (Account, password, name, 0, latitude, longitude, phonenumber, 0))
+            insert into Users (U_account, U_password, U_name, U_type, U_phone, U_balance)
+            values (?, ?, ?, ?, ?, ?)
+        ''', (Account, password, name, 0, phonenumber, 0))
+            #  (Account, password, name, 0, latitude, longitude, phonenumber, 0))
     except sqlite3.IntegrityError:
         flash("User account is already registered, please try another account")
         return redirect(url_for("main.sign_up"))

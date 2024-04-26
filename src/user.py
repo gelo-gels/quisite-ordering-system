@@ -83,19 +83,19 @@ def order_made():
         }), 200
     # check if wallet ballence sufficient
     # calculate fee
-    lat1, lon1 = db.cursor().execute("select U_latitude, U_longitude from Users where UID = ?",
-                                     (UID, )).fetchone()
-    lat2, lon2 = db.cursor().execute("select S_latitude, S_longitude from Stores where S_owner = ?",
-                                     (shop_owner_UID, )).fetchone()
-    distance = float(distance_between_locations(lat1, lon1, lat2, lon2))
+    # lat1, lon1 = db.cursor().execute("select U_latitude, U_longitude from Users where UID = ?",
+    #                                  (UID, )).fetchone()
+    # lat2, lon2 = db.cursor().execute("select S_latitude, S_longitude from Stores where S_owner = ?",
+    #                                  (shop_owner_UID, )).fetchone()
+    # distance = float(distance_between_locations(lat1, lon1, lat2, lon2))
 
-    Delivery_fee = 0 if json_data['Type'] == '0' else max(
-        int(round(distance * 10)), 10)
-    Total = Subtotal + Delivery_fee
-    if Total > user_info['U_balance']:
-        return jsonify({
-            'message': "Failed to create order: insufficient balance"
-        }), 200
+    # Delivery_fee = 0 if json_data['Type'] == '0' else max(
+    #     int(round(distance * 10)), 10)
+    # Total = Subtotal + Delivery_fee
+    # if Total > user_info['U_balance']:
+    #     return jsonify({
+    #         'message': "Failed to create order: insufficient balance"
+    #     }), 200
 
     # create successful, update database
     try:
@@ -118,12 +118,13 @@ def order_made():
         details_str = json.dumps({
             'Products': Products,
             'Subtotal': Subtotal,
-            'Delivery_fee': Delivery_fee,
+            # 'Delivery_fee': Delivery_fee,
         })
         rst = db.cursor().execute('''
             insert into Orders (O_status, O_end_time, O_distance, O_amount, O_type, O_details, SID)
             values (?, ?, ?, ?, ?, ?, ?)
-        ''', (0, None, distance, Total, json_data['Type'], details_str, SID))
+        ''', (0, None, Total, json_data['Type'], details_str, SID))
+            #  (0, None, distance, Total, json_data['Type'], details_str, SID))
 
         # update Process_Order
         OID = rst.lastrowid
@@ -214,22 +215,22 @@ def order_preview():
         Subtotal += r['P_price'] * q
 
     # calculate fee
-    lat1, lon1 = db.cursor().execute("select U_latitude, U_longitude from Users where UID = ?",
-                                     (session['user_info']['UID'], )).fetchone()
-    lat2, lon2 = db.cursor().execute("select S_latitude, S_longitude from Stores where S_owner = ?",
-                                     (Products[0]['P_owner'], )).fetchone()
-    distance = float(distance_between_locations(lat1, lon1, lat2, lon2))
+    # lat1, lon1 = db.cursor().execute("select U_latitude, U_longitude from Users where UID = ?",
+    #                                  (session['user_info']['UID'], )).fetchone()
+    # lat2, lon2 = db.cursor().execute("select S_latitude, S_longitude from Stores where S_owner = ?",
+    #                                  (Products[0]['P_owner'], )).fetchone()
+    # distance = float(distance_between_locations(lat1, lon1, lat2, lon2))
 
-    Delivery_fee = 0 if request.form['Dilivery'] == '0' else max(
-        int(round(distance * 10)), 10)
+    # Delivery_fee = 0 if request.form['Dilivery'] == '0' else max(
+    #     int(round(distance * 10)), 10)
 
     db.cursor().execute("drop table PID_list")
 
     return jsonify({
         'Products': Products,
         'Subtotal': Subtotal,
-        'Delivery_fee': Delivery_fee,
-        'Distance': distance,
+        # 'Delivery_fee': Delivery_fee,
+        # 'Distance': distance,
         'Type': request.form['Dilivery'],
         'S_owner': Products[0]['P_owner']
     }), 200
@@ -254,8 +255,8 @@ def search_shops():
     search = {i: request.form[i] for i in [
         'shop', 'sel1', 'price_low', 'price_high', 'meal', 'category', 'U_lat', 'U_lon']}
     desc = 'desc' if request.form["desc"] == 'true' else ''
-    search['medium'] = DISTANCE_BOUNDARY['medium']
-    search['far'] = DISTANCE_BOUNDARY['far']
+    # search['medium'] = DISTANCE_BOUNDARY['medium']
+    # search['far'] = DISTANCE_BOUNDARY['far']
     db = get_db()
     rst = db.cursor().execute(
         f'''
@@ -285,11 +286,11 @@ def search_shops():
     # latitude and longitude are checked, ordering is a list(user can only select), so don't worry about SQL injection
     table = {'tableRow': []}
     append = table['tableRow'].append
-    for SID, S_name, S_foodtype, distance in rst:
+    for SID, S_name, S_foodtype in rst:
         menu = search_menu(
             SID, search['price_high'], search['price_low'], search['meal'])
         if menu:
-            append({'shop_name': S_name, 'foodtype': S_foodtype, 'distance': distance,
+            append({'shop_name': S_name, 'foodtype': S_foodtype,
                     'menu': menu})
     response = jsonify(table)
     response.headers.add('Access-Control-Allow-Origin', '*')
@@ -347,10 +348,10 @@ def top_up():
         value = int(request.form['value'])
         if value <= 0:
             flash('Invalid value')
-            return redirect(url_for('main.nav'))
+            return redirect(url_for('main.userpage'))
     except ValueError:
         flash('Invalid value')
-        return redirect(url_for('main.nav'))
+        return redirect(url_for('main.userpage'))
 
     db = get_db()
     # update Users
@@ -369,4 +370,4 @@ def top_up():
     db.commit()
 
     flash('Top-up successful')
-    return redirect(url_for('main.nav'))
+    return redirect(url_for('main.userpage'))

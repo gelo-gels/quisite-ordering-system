@@ -331,8 +331,8 @@ def shop_register():
     owner_phone = user_info['U_phone']
     shop_name = request.form['shop_name']
     shop_category = request.form['shop_category']
-    shop_latitude = request.form['shop_latitude']
-    shop_longitude = request.form['shop_longitude']
+    # shop_latitude = request.form['shop_latitude']
+    # shop_longitude = request.form['shop_longitude']
 
     # check any blanks:
     for k, v in request.form.items():
@@ -342,16 +342,16 @@ def shop_register():
 
     # check formats:
     # latitude and longitude
-    try:
-        latitude = float(shop_latitude)
-        longitude = float(shop_longitude)
-    except ValueError:
-        flash("Please check: locations can only be float")
-        return redirect(url_for("main.nav"))
+    # try:
+    #     latitude = float(shop_latitude)
+    #     longitude = float(shop_longitude)
+    # except ValueError:
+    #     flash("Please check: locations can only be float")
+    #     return redirect(url_for("main.nav"))
 
-    if not (-90 <= latitude <= 90 and -180 <= longitude <= 180):
-        flash("Please check: locations not possible")
-        return redirect(url_for("main.nav"))
+    # if not (-90 <= latitude <= 90 and -180 <= longitude <= 180):
+    #     flash("Please check: locations not possible")
+    #     return redirect(url_for("main.nav"))
 
     # store newly registered store informations
     db = get_db()
@@ -359,7 +359,7 @@ def shop_register():
         shop_info = db.cursor().execute('''
             insert into Stores (S_name, S_latitude, S_longitude, S_phone, S_foodtype, S_owner)
             values (?, ?, ?, ?, ?, ?)
-        ''', (shop_name, latitude, longitude, owner_phone, shop_category, UID))
+        ''', (shop_name, longitude, owner_phone, shop_category, UID))
         # print(shop_name, latitude, longitude, owner_phone, shop_category, UID)
     except sqlite3.IntegrityError:
         flash("shop name has been registered !!")
