@@ -121,8 +121,8 @@ def order_made():
             # 'Delivery_fee': Delivery_fee,
         })
         rst = db.cursor().execute('''
-            insert into Orders (O_status, O_end_time, O_distance, O_amount, O_type, O_details, SID)
-            values (?, ?, ?, ?, ?, ?, ?)
+            insert into Orders (O_status, O_end_time, O_amount, O_type, O_details, SID)
+            values (?, ?, ?, ?, ?, ?)
         ''', (0, None, Total, json_data['Type'], details_str, SID))
             #  (0, None, distance, Total, json_data['Type'], details_str, SID))
 
@@ -253,37 +253,21 @@ def search_menu(SID, upper, lower, meal):
 @costumer.route("/search-shops", methods=['POST'])
 def search_shops():
     search = {i: request.form[i] for i in [
-        'shop', 'sel1', 'price_low', 'price_high', 'meal', 'category', 'U_lat', 'U_lon']}
+        'shop', 'sel1', 'price_low', 'price_high', 'meal', 'category']}
     desc = 'desc' if request.form["desc"] == 'true' else ''
-    # search['medium'] = DISTANCE_BOUNDARY['medium']
-    # search['far'] = DISTANCE_BOUNDARY['far']
+    
     db = get_db()
     rst = db.cursor().execute(
         f'''
-        with dis(SID, gio_dis) as (
-                select SID, _GIO_DIS(S_latitude, S_longitude, :U_lat, :U_lon) as gio_dis
-                from Stores
-            ),
-            dis_cat(SID, distance) as (
-                select SID, case
-                    when gio_dis >= :far then 'far'
-                    when gio_dis >= :medium then 'medium'
-                    else 'near'
-                end as distance
-                from Stores natural join dis
-            )
-
-        select SID, S_name, S_foodtype, distance
-        from Stores natural join dis natural join dis_cat
-        where instr(lower(S_name), lower(:shop)) > 0
-        and instr(lower(S_foodtype), lower(:category)) > 0
-        and distance like :sel1
-        order by {request.form['ordering']}
+        SELECT SID, S_name, S_foodtype
+        FROM Stores
+        WHERE INSTR(LOWER(S_name), LOWER(:shop)) > 0
+        AND INSTR(LOWER(S_foodtype), LOWER(:category)) > 0
+        ORDER BY {request.form['ordering']}
         ''' + desc,
         search
     ).fetchall()
-    # instr(a, b) > 0 means if a contains substring b
-    # latitude and longitude are checked, ordering is a list(user can only select), so don't worry about SQL injection
+    
     table = {'tableRow': []}
     append = table['tableRow'].append
     for SID, S_name, S_foodtype in rst:
