@@ -7,12 +7,12 @@ sqlite3.enable_callback_tracebacks(True)
 
 # Adjust the path to your database file accordingly
 DATABASE = os.path.join(os.path.dirname(__file__), "../HWDB.db")
-SCHEMA = os.path.join(os.path.dirname(__file__), '../schema.sql')
+SCHEMA = os.path.join(os.path.dirname(__file__), "../schema.sql")
 
 # distance boundary
 DISTANCE_BOUNDARY = {'medium': 200, 'far': 600}
 
-app = Flask(__name__, template_folder='../templates')
+app = Flask(__name__, template_folder='../templates', static_folder='../static')
 app.config['SECRET_KEY'] = os.urandom(99)
 
 def get_db():
@@ -50,8 +50,18 @@ def init_db():
         except sqlite3.Error as e:
             print("Error initializing database:", e)
 
+    from .login import user # Adjust the import path according to your project structure
+    app.register_blueprint(user)
+
     from .views import main  # Adjust the import path according to your project structure
-    app.register_blueprint(main)
+    app.register_blueprint(main, url_prefix="/")
+
+    from .admin import manager # Adjust the import path according to your project structure
+    app.register_blueprint(manager)
+
+    from .user import costumer # Adjust the import path according to your project structure
+    app.register_blueprint(costumer)
+
     return app
 
 @app.errorhandler(Exception)

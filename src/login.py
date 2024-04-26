@@ -7,7 +7,7 @@ from flask import (
     render_template, request, jsonify                   
     )
 
-main = Blueprint('main', __name__)
+user = Blueprint('user', __name__)
 
 def login_required(function):
     '''
@@ -25,7 +25,7 @@ def login_required(function):
             return function(*args, **kwargs)
     return wrap
 
-@main.route("/login", methods=['POST'])
+@user.route("/login", methods=['POST'])
 def login():
     Account = request.form['Account']
     password = request.form['password']
@@ -52,20 +52,20 @@ def login():
         session['user_info'] = dict(user_info)
         return redirect(url_for('main.nav'))
 
-@main.route("/logout", methods=['POST'])
+@user.route("/logout", methods=['POST'])
 @login_required
 def logout():
     session['user_info'] = None
     flash("Logged out")
-    return redirect(url_for('main.index'))
+    return redirect(url_for('main.home'))
 
 
-@main.route("/sign-up.html")
+@user.route("/sign-up.html")
 def sign_up():
     return render_template("sign-up.html")
 
 
-@main.route("/register-account-check", methods=['POST'])
+@user.route("/register-account-check", methods=['POST'])
 def register_account_check():
     '''
     checks if account is already registered
@@ -94,7 +94,7 @@ def register_account_check():
     return response
 
 
-@main.route("/register", methods=['POST'])
+@user.route("/register", methods=['POST'])
 def register():
     # get input values
     name = request.form['name']
@@ -173,7 +173,7 @@ def register():
     flash("Registered Successfully, you may login now")
     return redirect(url_for("main.index"))
 
-@main.route('/get_session', methods=['GET'])
+@user.route('/get_session', methods=['GET'])
 def get_session():
     if request.method == 'GET':
         data = {}

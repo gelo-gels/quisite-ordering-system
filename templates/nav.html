@@ -22,13 +22,13 @@
     <div class="container-fluid">
 
       <div class="navbar-header">
-        <a class="navbar-brand " href="{{ url_for('home') }}">FakePanda</a>
+        <a class="navbar-brand " href="{{ url_for('main.home') }}">FakePanda</a>
       </div>
 
     </div>
   </nav>
   <div style="float:right">
-    <form align="right" name="form1" method="post" action="{{url_for('logout')}}">
+    <form align="right" name="form1" method="post" action="{{url_for('user.logout')}}">
       <label class="logoutLblPos">
         <input name="Logout" type="submit" style="margin-left: 5px;" class=" btn btn-info " id="Logout" value="Logout">
       </label>
