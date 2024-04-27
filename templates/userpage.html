@@ -117,23 +117,6 @@
         <div class=" row  col-xs-8">
           <form class="form-horizontal" action="/action_page.php" method="post" id="search_form">
             
-            <!-- TEMPORARY FIX -->
-            <div class="form-group" style="visibility: hidden; position: absolute;">
-
-              <label class="control-label col-sm-1" for="Price">Price</label>
-              <div class="col-sm-2">
-
-                <input type="number" class="form-control" name="price_low" placeholder="0">
-
-              </div>
-              <label class="control-label col-sm-1" for="~">~</label>
-              <div class="col-sm-2">
-
-                <input type="number" class="form-control" name="price_high" placeholder="∞">
-
-              </div>
-              
-            </div>
 
             <div class="form-group">
                 <label class="control-label col-sm-1" for="Meal">Meal</label>
@@ -142,36 +125,12 @@
               </div>
             </div>
 
-            <!-- TEMPORARY FIX -->
-            <div class="form-group" style="visibility: hidden; position: absolute;">
-              <label class="control-label col-sm-1" for="desc order">desc order</label>
-              <div class="col-sm-5">
-                <input type="checkbox" class="form-check-input" id="desc">
-              </div>
-            </div>
 
             <div class="form-group">
                 <button type="submit" style="margin-left: 18px;" class="btn btn-primary">Search</button>
             </div>
           </form>
           <script type="text/javascript">
-            // var lat = 0.0, lon = 0.0;
-            // // get user location
-            // $(document).ready(function () {
-            //   $.ajax({
-            //     url: 'http://' + window.location.host + '/get_session',
-            //     type: 'GET',
-            //     dataType: 'json',
-            //     success: function (result) {
-            //       lat = result.user_info['U_latitude']
-            //       lon = result.user_info['U_longitude']
-            //     },
-            //     error: function (xhr, status, error) {
-            //       var err = eval("(" + xhr.responseText + ")");
-            //       alert(err.Message + '\n' + 'http://' + window.location.host + '/get_session');
-            //     }
-            //   });
-            // })
             var menu_data = {};
             function updateMealTable(shop) {
               // console.log(menu_data[shop.name])	
@@ -250,11 +209,7 @@
                   value = inputs.val();
                 input_value[name] = value;
               });
-              if (input_value['price_low'] == '') {
-                input_value['price_low'] = 0
-              }
               input_value['ordering'] = hash_table[input_value['ordering']]
-              input_value['desc'] = document.getElementById("desc").checked
               $.ajax({
                 url: 'http://' + window.location.host + "/search-shops",
                 method: method,
@@ -377,7 +332,7 @@
                           $('#Order_Made #Order_Made_Menu').html(body);
                           $('#Order_Made #Subtotal').html(`Subtotal $${Order_info.Subtotal}`)
                         //   $('#Order_Made #Delivery_fee').html(`<small><em>Delivery fee $${Order_info.Delivery_fee}</small></em>`)
-                          $('#Order_Made #Total_price').html(`Total Price $${Order_info.Delivery_fee + Order_info.Subtotal}`)
+                          $('#Order_Made #Total_price').html(`Total Price ₱${Order_info.Subtotal}`)
 
                           // global variable
                           Home_Order_Info.S_owner = Order_info.S_owner
@@ -437,7 +392,7 @@
                     </div>
                     <!-- <input type="hidden" name="Order_info"></input> -->
                     <div class="modal-footer">
-                      <p class="text-right" id="Subtotal"></p>
+                      <!-- <p class="text-right" id="Subtotal"></p> -->
                       <!-- <p class="text-right" id="Delivery_fee"></p> -->
                       <p class="text-right" id="Total_price"></p>
                       <button type="submit" name="Order_Made" class="btn btn-default">Order</button>
@@ -470,11 +425,11 @@
                 </script>
               </div>
             </div>
-            <ul class="pagination" id="page-update">
+            <!-- <ul class="pagination" id="page-update">
               <li class="page-item"><a class="page-link" href="#">pre</a></li>
               <li class="page-item"><a class="page-link" href="#">1</a></li>
               <li class="page-item"><a class="page-link" href="#">nxt</a></li>
-            </ul>
+            </ul> -->
           </div>
 
         </div>
@@ -656,7 +611,7 @@
                 $('#MyOrderDetail-1 #MyOrderDetail-T-1').html(body);
                 $('#MyOrderDetail-1 #Subtotal').html(`Subtotal $${Order_info.Subtotal}`)
                 // $('#MyOrderDetail-1 #Delivery_fee').html(`<small><em>Delivery fee $${Order_info.Delivery_fee}</small></em>`)
-                $('#MyOrderDetail-1 #Total_price').html(`Total Price $${Order_info.Delivery_fee + Order_info.Subtotal}`)
+                $('#MyOrderDetail-1 #Total_price').html(`Total Price ₱${Order_info.Delivery_fee + Order_info.Subtotal}`)
               },
               error: function (jqxhr, textStatus, errorThrown) {
                 alert(jqxhr.responseText)

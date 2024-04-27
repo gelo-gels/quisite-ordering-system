@@ -66,14 +66,17 @@ def order_made():
         # product exists, check if product is sufficient
         elif Quantity > rst['P_quantity']:
             non_sufficient_product_name.append(rst['P_name'])
-        # calculate subtotal
-        Subtotal += rst['P_price'] * Quantity
+        # # calculate subtotal
+        # Subtotal += rst['P_price'] * Quantity
 
         rst = dict(rst)
         rst['P_image'] = base64.b64encode(rst['P_image']).decode()
         rst['Order_quantity'] = Quantity
         del rst['P_quantity']  # useless
         Products.append(rst)
+
+        # Calculate subtotal after checking all products
+        Subtotal = sum(rst['P_price'] * Quantity for rst, Quantity in zip(Products, json_data['Quantities']))
 
     # check if product quantity sufficient
     if len(non_sufficient_product_name) > 0:
@@ -91,11 +94,11 @@ def order_made():
 
     # Delivery_fee = 0 if json_data['Type'] == '0' else max(
     #     int(round(distance * 10)), 10)
-    # Total = Subtotal + Delivery_fee
-    # if Total > user_info['U_balance']:
-    #     return jsonify({
-    #         'message': "Failed to create order: insufficient balance"
-    #     }), 200
+    Total = Subtotal
+    if Total > user_info['U_balance']:
+        return jsonify({
+            'message': "Failed to create order: insufficient balance"
+        }), 200
 
     # create successful, update database
     try:
@@ -121,8 +124,8 @@ def order_made():
             # 'Delivery_fee': Delivery_fee,
         })
         rst = db.cursor().execute('''
-            insert into Orders (O_status, O_end_time, O_distance, O_amount, O_type, O_details, SID)
-            values (?, ?, ?, ?, ?, ?, ?)
+            insert into Orders (O_status, O_end_time, O_amount, O_type, O_details, SID)
+            values (?, ?, ?, ?, ?, ?)
         ''', (0, None, Total, json_data['Type'], details_str, SID))
             #  (0, None, distance, Total, json_data['Type'], details_str, SID))
 
@@ -235,13 +238,13 @@ def order_preview():
         'S_owner': Products[0]['P_owner']
     }), 200
 
-def search_menu(SID, upper, lower, meal):
+def search_menu(SID, meal):
     db = get_db()
     rst = db.cursor().execute('''
         select *
         from Products
-        where P_store = ? and P_price <= ? and P_price >= ? and instr(lower(P_name), lower(?)) > 0
-        ''', (SID, upper, lower, meal)).fetchall()
+        where P_store = ? and instr(lower(P_name), lower(?)) > 0
+        ''', (SID, meal)).fetchall()
     # instr(a, b) > 0 means if a contains substring b
 
     rst = [dict(r) for r in rst]
@@ -253,8 +256,8 @@ def search_menu(SID, upper, lower, meal):
 @costumer.route("/search-shops", methods=['POST'])
 def search_shops():
     search = {i: request.form[i] for i in [
-        'price_low', 'price_high', 'meal']}
-    desc = 'desc' if request.form["desc"] == 'true' else ''
+        'meal']}
+    # desc = 'desc' if request.form["desc"] == 'true' else ''
     db = get_db()
     rst = db.cursor().execute(
         '''
@@ -267,20 +270,33 @@ def search_shops():
     # Optionally, you can order the results here in Python
     # based on a specific criterion, for example, shop name.
     # You can replace this with your desired ordering logic.
-    rst = sorted(rst, key=lambda x: x[1], reverse=(desc == 'desc'))
+    rst = sorted(rst, key=lambda x: x[1])
 
     table = {'tableRow': []}
     append = table['tableRow'].append
     for SID, S_name, S_foodtype in rst:
         menu = search_menu(
-            SID, search['price_high'], search['price_low'], search['meal'])
+            SID, search['meal'])
         if menu:
             append({'shop_name': S_name, 'foodtype': S_foodtype,
                     'menu': menu})
+
+            # Call updateMealTable() immediately after fetching the menu
+            # updateMealTable({'name': S_name})  # Pass the shop object as argument
+            
     response = jsonify(table)
     response.headers.add('Access-Control-Allow-Origin', '*')
     response.status_code = 200
     return response
+
+
+
+
+
+
+
+
+
 
 
 
