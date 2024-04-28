@@ -11,6 +11,71 @@ from flask import (
 
 costumer = Blueprint('costumer', __name__)
 
+@costumer.route("/shop_add", methods=['POST'])
+@login_required
+def shop_add():
+    # get input values
+    user_info = session.get('user_info')
+    UID = user_info['UID']
+    meal_name = request.form['meal_name']
+    meal_price = request.form['meal_price']
+    meal_quantity = request.form['meal_quantity']
+    meal_pic = request.files['meal_pic']    # image file
+
+    # check if user is owner
+    if(user_info['U_type'] == 0):
+        flash("Please register your store first")
+        return redirect(url_for("main.userpage"))
+
+    # fetch shop_info
+    db = get_db()
+    shop_info = db.cursor().execute(
+        """ select *
+            from Stores
+            where S_owner = ?""", (UID,)
+    ).fetchone()
+    SID = shop_info['SID']
+
+    # check any blanks:
+    for k, v in request.form.items():
+        if v == '':
+            flash(f"Please check: '{k}' is not filled")
+            return redirect(url_for("main.userpage"))
+    if(meal_pic.filename == ''):
+        flash("Please upload a picture for the product")
+        return redirect(url_for("main.userpage"))
+
+    # get the extension of the file ex: png, jpeg
+    meal_pic_extension = meal_pic.filename.split('.')[1]
+
+    # check formats:
+    # price and quantity
+    if(int(meal_price) < 0 or int(meal_quantity) < 0):
+        flash("Please check: price and quantity can only be non-negatives")
+        return redirect(url_for("main.userpage"))
+
+    # store newly added product informations
+    db = get_db()
+    try:
+        db.cursor().execute('''
+            insert into Products (P_name, P_price, P_quantity, P_image, P_imagetype, P_owner, P_store)
+            values (?, ?, ?, ?, ?, ?, ?)
+        ''', (meal_name, meal_price, meal_quantity, base64.b64encode(meal_pic.read()), meal_pic_extension, UID, SID))
+    except sqlite3.IntegrityError:
+        # print("something went wrong!!")
+        flash(" oops something went wrong!!")
+        return redirect(url_for("main.userpage"))
+    # session['product_info'] = dict(product_info)       # not sure if needed
+    db.commit()
+
+    # Register successfully
+    flash("Product added successfully")
+    return redirect(url_for("main.userpage"))
+
+    
+
+
+
 @costumer.route("/order_made", methods=['POST'])
 @login_required
 def order_made():

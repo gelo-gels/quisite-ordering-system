@@ -46,11 +46,15 @@ def login():
     elif user_info['U_account'] == 'cian':
         # admin login
         session['user_info'] = dict(user_info)
-        return redirect(url_for('main.adminpage'))
+        return redirect(url_for('main.userpage'))
     else:
         # login successfully
         session['user_info'] = dict(user_info)
         return redirect(url_for('main.userpage'))
+
+    
+
+
 
 @user.route("/logout", methods=['POST'])
 @login_required
