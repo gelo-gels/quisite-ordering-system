@@ -74,7 +74,7 @@
       <div id="Home" class="tab-pane fade in active">
         <h3>Products</h3>
 
-        <!-- DISPLAY OWN SHOP MENU -->
+        <!-- DISPLAY SHOP MENU -->
         <div class="row">
           <div class="  col-xs-8">
             <table class="table" style=" margin-top: 15px;">
@@ -86,9 +86,7 @@
 
                   <th scope="col">price</th>
                   <th scope="col">Quantity</th>
-                  <th scope="col">Action</th>
-                  <th scope="col">Edit</th>
-                  <th scope="col">Delete</th>
+                  <th scope="col">Order</th>
                 </tr>
               </thead>
               <tbody>
@@ -98,56 +96,38 @@
                   <td><img src="data:image/{{row['P_imagetype']}};base64,{{image_info[loop.index-1]}}"
                       style="width: 72px; height: 72px;" alt="menu_image"></td>
                   <td>{{row['P_name']}}</td>
-
                   <td>{{row['P_price']}} </td>
                   <td>{{row['P_quantity']}} </td>
                   <td>
-                    <button type="button" data-toggle="modal" data-target="#menu" name="_menu" class="btn btn-info " onclick="updateMealTable(this)">Open menu</button>
+                    <button type="button" data-toggle="modal" data-target="#menu{{ loop.index }}" name="_menu" class="btn btn-info " onclick="updateMealTable(this)">Order</button>
                   </td>
-                  <td>
-                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#{{ loop.index }}">
-                      Edit
-                    </button></td>
-                  <!-- Modal -->
-
-                  <div class="modal fade" id="{{ loop.index }}" data-backdrop="static" tabindex="-1" role="dialog"
+                  <!-- Modal ORDER-->
+                  <div class="modal fade" id="menu{{ loop.index }}" data-backdrop="static" tabindex="-1" role="dialog"
                     aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
+                    <div class="modal-dialog  modal-sm" role="document">
                       <div class="modal-content">
                         <div class="modal-header">
-                          <h5 class="modal-title" id="staticBackdropLabel">{{row['P_name']}} Edit</h5>
+                          <h4 class="modal-title" id="staticBackdropLabel">{{row['P_name']}} Order</h4>
                           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                           </button>
                         </div>
-                        <!-- EDIT PRODUCT -->
-                        <form id="edit_price_and_quantity" action="edit_price_and_quantity" method="post">
-                          <div class="modal-body">
-                            <input name="edit_PID" type="hidden" value="{{row['PID']}}">
-                            <div class="row">
-                              <div class="col-xs-6">
-                                <label for="edit_price">price</label>
-                                <input class="form-control" id="edit_price" name="edit_price" type="text">
-                              </div>
-                              <div class="col-xs-6">
-                                <label for="edit_quantity">quantity</label>
-                                <input class="form-control" id="edit_quantity" name="edit_quantity" type="text">
-                              </div>
+                        <div class="modal-body">
+                          <form id="menu{{ loop.index }}" action="order-preview" method="post">
+                            
+                            <div class="modal-footer">
+                              <label>Shipping Option:
+                                <select class="form-control" name="PickUp" style="width: 150px;">
+                                  <option value="1">Pick-up</option>
+                                </select>
+                              </label>
+                              <button type="submit" name="Order_Preview" class="btn btn-default">Preview Order</button>
                             </div>
-                          </div>
-                          <div class="modal-footer">
-                            <button type="submit" class="btn btn-default">Edit</button>
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                          </div>
-                        </form>
+                          </form>
+                        </div>
                       </div>
-                    </div>
+                    </div>  
                   </div>
-                  <!-- DELETE PRODUCT -->
-                  <form id="delete_product" action="delete_product" method="post">
-                    <input name="delete_PID" type="hidden" value="{{row['PID']}}">
-                    <td><button type="submit" class="btn btn-danger">Delete</button></td>
-                  </form>
                 </tr>
                 {% endfor %}
 

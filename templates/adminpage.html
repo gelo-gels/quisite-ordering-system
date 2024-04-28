@@ -713,10 +713,6 @@
                     <button type="button" class="btn btn-info" data-toggle="modal" data-target="#top_up{{ loop.index }}">
                       Top Up
                     </button></td>
-                  <td>
-                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#edit_password{{ loop.index }}">
-                      Change Password
-                    </button></td>
                   <!-- Modal TOP UP-->
                   <div class="modal fade" id="top_up{{ loop.index }}" data-backdrop="static" tabindex="-1" role="dialog"
                     aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -739,63 +735,13 @@
                       </div>
                     </div>
                   </div>
-                  <!-- Change Password Modal -->
-                  <div class="modal fade" id="#edit_password{{ loop.index }}" tabindex="-1" role="dialog" data-backdrop="static" 
-                  aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="staticBackdropLabel">{{row['U_name']}} Change Password</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <!-- Form for changing password -->
-                            <div class="modal-body">
-                                <form id="edit_password{{ loop.index }}" action="edit_password" method="post">
-                                    <div class="form-group">
-                                        <label for="current-password">Current Password</label>
-                                        <input type="password" class="form-control" id="current-password-{{ loop.index }}" name="current-password" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="new-password">New Password</label>
-                                        <input type="password" class="form-control" id="new-password-{{ loop.index }}" name="new-password" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="confirm-new-password">Confirm New Password</label>
-                                        <input type="password" class="form-control" id="confirm-new-password-{{ loop.index }}" name="confirm-new-password" required>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary save-password-btn" data-modal-index="{{ loop.index }}">Save Changes</button>
-                            </div>
-                        </div>
-                    </div>
-                  </div>
                   <!-- DELETE ACCOUNT -->
                   <form id="delete_account" action="delete_account" method="post">
                     <input name="delete_UID" type="hidden" value="{{row['UID']}}">
                     <td><button type="submit" class="btn btn-danger">Delete</button></td>
                   </form>
                 </tr>
-                <script type="text/javascript">
-                  transactions = [];
-                  document.addEventListener("DOMContentLoaded", function () {
-                      // Event listener for Save Changes button in the Change Password modal
-                      var savePasswordButtons = document.querySelectorAll(".save-password-btn");
-                      savePasswordButtons.forEach(function (button) {
-                          button.addEventListener("click", function () {
-                              // Get the modal index from the data attribute
-                              var modalIndex = this.getAttribute("data-modal-index");
-                              // Call the edit_password function with the modal index
-                              edit_password(modalIndex);
-                          });
-                      });
-                  });
- 
-                </script>
+        
                 {% endfor %}
 
               </tbody>
