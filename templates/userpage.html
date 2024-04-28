@@ -39,7 +39,7 @@
 
     <ul class="nav nav-tabs">
       <li class="active"><a href="#Home">Home</a></li>
-      <li><a href="#Search">Search</a></li>
+      <li><a href="#Search" onclick="updateMealTable()">Search</a></li>
       <li><a href="#Profile">Profile</a></li>
       <li><a href="#MyOrder" onclick="searchMyOrders()">My Orders</a></li>
     </ul>
@@ -60,8 +60,9 @@
 
                   <th scope="col">price</th>
                   <th scope="col">Quantity</th>
-                  <!-- <th scope="col">Edit</th>
-                  <th scope="col">Delete</th> -->
+                  <th scope="col">Action</th>
+                  <th scope="col">Edit</th>
+                  <th scope="col">Delete</th>
                 </tr>
               </thead>
               <tbody>
@@ -74,12 +75,16 @@
 
                   <td>{{row['P_price']}} </td>
                   <td>{{row['P_quantity']}} </td>
-                  <!-- <td><button type="button" class="btn btn-info" data-toggle="modal" data-target="#{{ loop.index }}">
+                  <td>
+                    <button type="button" data-toggle="modal" data-target="#menu" name="_menu" class="btn btn-info " onclick="updateMealTable(this)">Open menu</button>
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#{{ loop.index }}">
                       Edit
-                    </button></td> -->
+                    </button></td>
                   <!-- Modal -->
 
-                  <!-- <div class="modal fade" id="{{ loop.index }}" data-backdrop="static" tabindex="-1" role="dialog"
+                  <div class="modal fade" id="{{ loop.index }}" data-backdrop="static" tabindex="-1" role="dialog"
                     aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                       <div class="modal-content">
@@ -88,9 +93,9 @@
                           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                           </button>
-                        </div> -->
+                        </div>
                         <!-- EDIT PRODUCT -->
-                        <!-- <form id="edit_price_and_quantity" action="edit_price_and_quantity" method="post">
+                        <form id="edit_price_and_quantity" action="edit_price_and_quantity" method="post">
                           <div class="modal-body">
                             <input name="edit_PID" type="hidden" value="{{row['PID']}}">
                             <div class="row">
@@ -111,12 +116,12 @@
                         </form>
                       </div>
                     </div>
-                  </div> -->
+                  </div>
                   <!-- DELETE PRODUCT -->
-                  <!-- <form id="delete_product" action="delete_product" method="post">
+                  <form id="delete_product" action="delete_product" method="post">
                     <input name="delete_PID" type="hidden" value="{{row['PID']}}">
                     <td><button type="submit" class="btn btn-danger">Delete</button></td>
-                  </form> -->
+                  </form>
                 </tr>
                 {% endfor %}
 
@@ -205,6 +210,23 @@
               page += '<li class="page-item"><a class="page-link" href="#" onclick="updateShopTable(this.name)" name="nxt">nxt</a></li>'
               $("#page-update").html(page);
             }
+
+            function fetchSearchMeal() {
+            $.ajax({
+              url: 'http://' + window.location.host + "/fetch-SearchMeal",
+              method: "POST",
+              data: { 'UID': UID },
+              async: false,
+              success: function (data) {
+                MyOrders = data.tableRow;
+                updateMyOrderTable();
+              },
+              error: function (jqxhr, textStatus, errorThrown) {
+                alert("error: " + textStatus)
+              }
+            })
+          }
+
             var shop_data = {}, shops_per_page = 5;
             function updateArr(shops) {
               shop_arr = [];
@@ -217,7 +239,7 @@
               });
               return
             }
-            var hash_table = { "shop": 'S_name', "distance": 'manhattan', "category": 'S_foodtype' }
+            var hash_table = { "shop": 'S_name', "category": 'S_foodtype' }
             $('form.form-horizontal').on('submit', function () {
             //   var location = { 'U_lat': lat, 'U_lon': lon }
               var f = $(this), method = f.attr('method'), input_value = {};
@@ -246,6 +268,40 @@
               })
               return false;
             });
+
+            // var hash_table = { "shop": 'S_name', "distance": 'manhattan', "category": 'S_foodtype' }
+            // $('form.form-horizontal').on('submit', function () {
+            //   var location = { 'U_lat': lat, 'U_lon': lon }
+            //   var f = $(this), method = f.attr('method'), input_value = {};
+            //   f.find('[name]').each(function (index, value) {
+            //     var inputs = $(this),
+            //       name = inputs.attr('name'),
+            //       value = inputs.val();
+            //     input_value[name] = value;
+            //   });
+            //   if (input_value['price_low'] == '') {
+            //     input_value['price_low'] = 0
+            //   }
+            //   input_value['ordering'] = hash_table[input_value['ordering']]
+            //   input_value['desc'] = document.getElementById("desc").checked
+            //   $.ajax({
+            //     url: 'http://' + window.location.host + "/search-shops",
+            //     method: method,
+            //     data: Object.assign({}, input_value, location),
+            //     async: false,
+            //     success: function (data) {
+            //       for (key in menu_data) delete menu_data[key];
+            //       shop_data = data.tableRow
+            //       updateArr(shop_data);
+            //       updatePage(Math.ceil(shop_data.length / shops_per_page));
+            //       updateShopTable("1");
+            //     },
+            //     error: function (jqxhr, textStatus, errorThrown) {
+            //       alert("error: " + textStatus)
+            //     }
+            //   })
+            //   return false;
+            // });
           </script>
         </div>
 
@@ -613,7 +669,6 @@
                     <p class="text-right"><small><em>Delivery fee $19</em></small></p>
                     <p class="text-right">Total Price $218</p> -->
                     <div class="modal-footer">
-                      <p class="text-right" id="Subtotal"></p>
                       <!-- <p class="text-right" id="Delivery_fee"></p> -->
                       <p class="text-right" id="Total_price"></p>
                     </div>
@@ -627,20 +682,20 @@
         <script type="text/javascript">
           var UID = -1;
           // get user location
-        //   $(document).ready(function () {
-        //     $.ajax({
-        //       url: 'http://' + window.location.host + '/get_session',
-        //       type: 'GET',
-        //       dataType: 'json',
-        //       success: function (result) {
-        //         UID = result.user_info['UID']
-        //       },
-        //       error: function (xhr, status, error) {
-        //         var err = eval("(" + xhr.responseText + ")");
-        //         alert(err.Message + '\n' + 'http://' + window.location.host + '/get_session');
-        //       }
-        //     });
-        //   })
+          $(document).ready(function () {
+            $.ajax({
+              url: 'http://' + window.location.host + '/get_session',
+              type: 'GET',
+              dataType: 'json',
+              success: function (result) {
+                UID = result.user_info['UID']
+              },
+              error: function (xhr, status, error) {
+                var err = eval("(" + xhr.responseText + ")");
+                alert(err.Message + '\n' + 'http://' + window.location.host + '/get_session');
+              }
+            });
+          })
           function deleteOrder(oid) {
             // implement your order delete function
             // !!! careful, use parseInt(OID) here since OID is str
@@ -682,7 +737,7 @@
                 $('#MyOrderDetail-1 #MyOrderDetail-T-1').html(body);
                 $('#MyOrderDetail-1 #Subtotal').html(`Subtotal $${Order_info.Subtotal}`)
                 // $('#MyOrderDetail-1 #Delivery_fee').html(`<small><em>Delivery fee $${Order_info.Delivery_fee}</small></em>`)
-                $('#MyOrderDetail-1 #Total_price').html(`Total Price ₱${Order_info.Delivery_fee + Order_info.Subtotal}`)
+                $('#MyOrderDetail-1 #Total_price').html(`Total Price ₱${Order_info.Subtotal}`)
               },
               error: function (jqxhr, textStatus, errorThrown) {
                 alert(jqxhr.responseText)

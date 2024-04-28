@@ -326,7 +326,7 @@ def search_shops():
     # desc = 'desc' if request.form["desc"] == 'true' else ''
     db = get_db()
     rst = db.cursor().execute(
-        '''
+        f'''
         SELECT SID, S_name, S_foodtype
         FROM Stores
         ''',
@@ -341,15 +341,15 @@ def search_shops():
     table = {'tableRow': []}
     append = table['tableRow'].append
     for SID, S_name, S_foodtype in rst:
-        menu = search_menu(
-            SID, search['meal'])
+        menu = search_menu(SID, search['meal'])
         if menu:
             append({'shop_name': S_name, 'foodtype': S_foodtype,
                     'menu': menu})
 
             # Call updateMealTable() immediately after fetching the menu
             # updateMealTable({'name': S_name})  # Pass the shop object as argument
-            
+    
+    print("Table:", table)  # Debugging
     response = jsonify(table)
     response.headers.add('Access-Control-Allow-Origin', '*')
     response.status_code = 200
@@ -380,6 +380,7 @@ def order_detail():
 @costumer.route("/search-MyOrders", methods=['POST'])
 def search_MyOrders():
     UID = int(request.form['UID'])
+    # print("UID:", UID)  # Debugging
     db = get_db()
     rst = db.cursor().execute(
         '''
@@ -398,12 +399,13 @@ def search_MyOrders():
         where UID = ?
         ''', (UID,)
     ).fetchall()
+    # print("Result set:", rst)  # Debugging
     table = {'tableRow': []}
     append = table['tableRow'].append
     for Status, start_time, end_time, S_name, OID, O_amount in rst:
         append({'Status': Status, 'start_time': start_time, 'end_time': end_time, 'S_name': S_name,
                 'OID': OID, 'total_price': O_amount})
-    print(table['tableRow'])
+    print("Table:", table['tableRow'])
     response = jsonify(table)
     response.headers.add('Access-Control-Allow-Origin', '*')
     response.status_code = 200
