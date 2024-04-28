@@ -46,7 +46,7 @@ def login():
     elif user_info['U_account'] == 'cian':
         # admin login
         session['user_info'] = dict(user_info)
-        return redirect(url_for('main.userpage'))
+        return redirect(url_for('main.adminpage'))
     else:
         # login successfully
         session['user_info'] = dict(user_info)
