@@ -2,14 +2,39 @@
 <html lang="en">
 
 <head>
-  <!-- Required meta tags -->
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Quisite</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="A ordering system By 12 - Einstein" />
+	<meta name="keywords" content="A ordering system By 12 - Einstein" />
+	<meta name="author" content="" />
 
-  <!-- Bootstrap CSS -->
+	
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	<!-- Facebook and Twitter integration -->
+	<meta property="og:title" content="" />
+	<meta property="og:image" content="" />
+	<meta property="og:url" content="" />
+	<meta property="og:site_name" content="" />
+	<meta property="og:description" content="" />
+	<meta name="twitter:title" content="" />
+	<meta name="twitter:image" content="" />
+	<meta name="twitter:url" content="" />
+	<meta name="twitter:card" content="" />
+
+	<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+	<link rel="shortcut icon" href="favicon.ico">
+
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,300' rel='stylesheet' type='text/css'>
+
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/animate.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+
+	<!-- Modernizr JS -->
+	<script src="{{ url_for('static', filename='js/modernizr-2.6.2.min.js') }}"></script>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -17,32 +42,33 @@
 </head>
 
 <body>
-    
-    <nav class="navbar navbar-inverse">
-        <div class="container-fluid">
-    
-          <div class="navbar-header">
-            <a class="navbar-brand " href="{{ url_for('main.home') }}">FakePanda</a>
-          </div>
-    
+
+  <!-- Nav -->
+	<div class="navbar_home">
+    <div class="row">
+        <div class="col-md-6">
+            <a href="homepage.html" class="poppins-medium branding__title btn__standard" >
+                QUISITE
+            </a>
         </div>
-      </nav>
-      <div style="float:right">
-        <form align="right" name="form1" method="post" action="{{url_for('user.logout')}}">
-          <label class="logoutLblPos">
-            <input name="Logout" type="submit" style="margin-left: 5px;" class=" btn btn-info " id="Logout" value="Logout">
-          </label>
-        </form>
-      </div>
+        <div class="col-md-6" style="text-align: right">
+            <div class="nav-tabs" style="border: 0 !important">
+              <a href="#Home">Home</a>
+                <a href="#Search" class="btn__standard" style="margin-right: 10px">
+                    <img src="{{ url_for('main.get_search_image') }}" style="width: 20px" />
+                </a>
+                <a href="#Profile" class="btn__standard">
+                    <img src="{{ url_for('main.get_user_image') }}" style="width: 20px" />
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+    
+      
 
   <div class="container">
 
-    <ul class="nav nav-tabs">
-      <li class="active"><a href="#Home">Home</a></li>
-      <li><a href="#Search" onclick="updateMealTable()">Search</a></li>
-      <li><a href="#Profile">Profile</a></li>
-      <li><a href="#MyOrder" onclick="searchMyOrders()">My Orders</a></li>
-    </ul>
 
     <div class="tab-content">
       <div id="Home" class="tab-pane fade in active">
@@ -210,23 +236,6 @@
               page += '<li class="page-item"><a class="page-link" href="#" onclick="updateShopTable(this.name)" name="nxt">nxt</a></li>'
               $("#page-update").html(page);
             }
-
-            function fetchSearchMeal() {
-            $.ajax({
-              url: 'http://' + window.location.host + "/fetch-SearchMeal",
-              method: "POST",
-              data: { 'UID': UID },
-              async: false,
-              success: function (data) {
-                MyOrders = data.tableRow;
-                updateMyOrderTable();
-              },
-              error: function (jqxhr, textStatus, errorThrown) {
-                alert("error: " + textStatus)
-              }
-            })
-          }
-
             var shop_data = {}, shops_per_page = 5;
             function updateArr(shops) {
               shop_arr = [];
@@ -365,10 +374,11 @@
                       <!-- Order button  -->
                     </div>
                     <div class="modal-footer">
-                      <label>Diliver type:<select class="form-control" name="Dilivery" style="width: 150px;">
-                          <option value="1">Delivery</option>
-                          <option value="0">Pick-up</option>
-                        </select></label>
+                      <label>Shipping Option:
+                        <select class="form-control" name="PickUp" style="width: 150px;">
+                          <option value="1">Pick-up</option>
+                        </select>
+                      </label>
                       <button type="submit" name="Order_Preview" class="btn btn-default">Preview Order</button>
                     </div>
                   </form>
@@ -557,8 +567,19 @@
                 </div>
               </div>
             </div>
-          </div>
 
+            <div class="nav-tabs" style="border: 0 !important">
+              <a href="#MyOrder" onclick="searchMyOrders()">My Orders</a>
+            </div>
+
+            <form align="right" name="form1" method="post" action="{{url_for('user.logout')}}">
+              <label class="logoutLblPos">
+                <input name="Logout" type="submit" style="margin-left: 5px;" class=" btn btn-info " id="Logout" value="Logout">
+              </label>
+            </form>
+
+
+          </div>
         </div>
       </div>
 

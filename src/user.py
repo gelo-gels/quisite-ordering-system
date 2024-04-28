@@ -300,7 +300,7 @@ def order_preview():
         'Subtotal': Subtotal,
         # 'Delivery_fee': Delivery_fee,
         # 'Distance': distance,
-        'Type': request.form['Dilivery'],
+        'Type': request.form['PickUp'],
         'S_owner': Products[0]['P_owner']
     }), 200
 
@@ -349,7 +349,7 @@ def search_shops():
             # Call updateMealTable() immediately after fetching the menu
             # updateMealTable({'name': S_name})  # Pass the shop object as argument
     
-    print("Table:", table)  # Debugging
+    # print("Table:", table)  # Debugging
     response = jsonify(table)
     response.headers.add('Access-Control-Allow-Origin', '*')
     response.status_code = 200
