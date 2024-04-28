@@ -3,8 +3,8 @@ import hashlib
 from . import get_db
 from functools import wraps
 from flask import (
-    Blueprint, flash, redirect, session, url_for, 
-    render_template, request, jsonify                   
+    Blueprint, flash, redirect, session, 
+    url_for, request, jsonify                   
     )
 
 user = Blueprint('user', __name__)
@@ -64,9 +64,7 @@ def logout():
     return redirect(url_for('main.home'))
 
 
-@user.route("/sign-up.html")
-def sign_up():
-    return render_template("sign-up.html")
+
 
 
 @user.route("/register-account-check", methods=['POST'])
@@ -177,6 +175,52 @@ def register():
     # Register successfully
     flash("Registered Successfully, you may login now")
     return redirect(url_for("main.index"))
+
+@user.route('/edit-password', methods=['POST'])
+def edit_password():
+    
+    Account = request.form['Account']
+    password = request.form['current_password']
+    new_password = request.form['password']
+ 
+    # check re-type password
+    if new_password != request.form['re-password']:
+        # sign-up fail
+        flash("Please check: password and re-password need to be the same!")
+        return redirect(url_for("main.adminpage"))
+    
+    # pwd
+    for c in new_password:
+        if not (c.isdigit() or c.isalpha()):
+            flash("Please check: password can only contain letters and numbers")
+            return redirect(url_for("main.adminpage"))
+    
+    # hash password
+    password = hashlib.sha256((new_password + Account).encode()).hexdigest()
+
+    # store newly registered user informations
+    db = get_db()
+    
+    try:
+        user_info = db.cursor().execute(
+              """ select *
+            from Users
+            where U_account = ? and U_password = ?""", (Account, password)
+        ).fetchone()
+        if user_info is None:
+        # wrong password
+            flash("Please input your original password again.")
+            return redirect(url_for('main.adminpage'))
+    except:
+        db.commit()
+
+    # Change password successfully
+    flash("Changed Password Successfully")
+    return redirect(url_for("main.adminpage"))
+
+    
+    
+
 
 @user.route('/get_session', methods=['GET'])
 def get_session():

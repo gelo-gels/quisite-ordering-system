@@ -40,6 +40,7 @@
       <li class="active"><a href="#Shop">Shops</a></li>
       <li><a href="#ShopOrder" onclick="searchShopOrders()">Shop Orders</a></li>
       <li><a href="#TsRecord" onclick="searchTransactionRecord()">Transaction Records</a></li>
+      <li><a href="#Profile">Profile</a></li>
     </ul>
 
     <div class="tab-content">
@@ -244,7 +245,24 @@
 
 
       </div>
-
+      <script type="text/javascript">
+        var UID = -1;
+        // get user location
+        $(document).ready(function () {
+          $.ajax({
+            url: 'http://' + window.location.host + '/get_session',
+            type: 'GET',
+            dataType: 'json',
+            success: function (result) {
+              UID = result.user_info['UID']
+            },
+            error: function (xhr, status, error) {
+              var err = eval("(" + xhr.responseText + ")");
+              alert(err.Message + '\n' + 'http://' + window.location.host + '/get_session');
+            }
+          });
+        })
+      </script>
       <!-- Shop Orders -->
       <div id="ShopOrder" class="tab-pane fade">
         <h3>Shop Orders</h3>
@@ -610,7 +628,185 @@
           })
         }
       </script>
+      <!-- Profile -->
 
+      <div id="Profile" class="tab-pane fade">
+        <h3>Profile</h3>
+        <div class="row">
+          <div class="col-xs-12">
+            <div>
+              Username: {{user_info['U_account']}}
+            </div>
+            <div>
+              Name: {{user_info['U_name']}}
+            </div>
+            <div>
+              Account Type: {{'manager' if user_info['U_type'] else
+              'user'}}
+            </div>
+            <div>
+              PhoneNumber: {{user_info['U_phone']}}
+            </div>
+            <div>
+              
+            walletbalance: {{user_info['U_balance']}}
+            </div>
+            <!-- Modal -->
+            <button type="button " style="margin-left: 5px;" class=" btn btn-info " data-toggle="modal"
+              data-target="#top_up">Top Up</button>
+            <div class="modal fade" id="top_up" data-backdrop="static" tabindex="-1" role="dialog"
+              aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog  modal-sm">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Top Up</h4>
+                  </div>
+                  <div class="modal-body">
+                    <form id="top_up" action="top_up" method="post">
+                      <input type="number" class="form-control" name="value" placeholder="enter add value">
+                      <div class="modal-footer">
+                        <button type="submit" class="btn btn-default">Add</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+        
+        
+        <h3>User Information</h3>
+
+        <!-- DISPLAY OWN SHOP MENU -->
+        <div class="row">
+          <div class="  col-xs-8">
+            <table class="table" style=" margin-top: 15px;">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">UID</th>
+                  <th scope="col">Username</th>
+                  <th scope="col">Name</th>
+
+                  <th scope="col">Phone Number</th>
+                  <th scope="col">Wallat Balance</th>
+                  <th scope="col">Top Up</th>
+                  <th scope="col">Edit</th>
+                  <th scope="col">Delete</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in costumer_info %}
+                <tr>
+                  <th scope="row">{{loop.index}}</th>
+                  <td>{{row['UID']}}</th>
+                  <td>{{row['U_account']}}</td>
+                  <td>{{row['U_name']}}</td>
+
+                  <td>{{row['U_phone']}} </td>
+                  <td>{{row['U_balance']}} </td>
+                  <td>
+                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#top_up{{ loop.index }}">
+                      Top Up
+                    </button></td>
+                  <td>
+                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#edit_password{{ loop.index }}">
+                      Change Password
+                    </button></td>
+                  <!-- Modal TOP UP-->
+                  <div class="modal fade" id="top_up{{ loop.index }}" data-backdrop="static" tabindex="-1" role="dialog"
+                    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog  modal-sm" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h4 class="modal-title" id="staticBackdropLabel">{{row['U_name']}} Top Up</h4>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <form id="top_up{{ loop.index }}" action="top_up" method="post">
+                            <input type="number" class="form-control" name="value" placeholder="enter add value">
+                            <div class="modal-footer">
+                              <button type="submit" class="btn btn-default">Add</button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Change Password Modal -->
+                  <div class="modal fade" id="#edit_password{{ loop.index }}" tabindex="-1" role="dialog" data-backdrop="static" 
+                  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="staticBackdropLabel">{{row['U_name']}} Change Password</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <!-- Form for changing password -->
+                            <div class="modal-body">
+                                <form id="edit_password{{ loop.index }}" action="edit_password" method="post">
+                                    <div class="form-group">
+                                        <label for="current-password">Current Password</label>
+                                        <input type="password" class="form-control" id="current-password-{{ loop.index }}" name="current-password" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="new-password">New Password</label>
+                                        <input type="password" class="form-control" id="new-password-{{ loop.index }}" name="new-password" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="confirm-new-password">Confirm New Password</label>
+                                        <input type="password" class="form-control" id="confirm-new-password-{{ loop.index }}" name="confirm-new-password" required>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary save-password-btn" data-modal-index="{{ loop.index }}">Save Changes</button>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                  <!-- DELETE ACCOUNT -->
+                  <form id="delete_account" action="delete_account" method="post">
+                    <input name="delete_UID" type="hidden" value="{{row['UID']}}">
+                    <td><button type="submit" class="btn btn-danger">Delete</button></td>
+                  </form>
+                </tr>
+                <script type="text/javascript">
+                  transactions = [];
+                  document.addEventListener("DOMContentLoaded", function () {
+                      // Event listener for Save Changes button in the Change Password modal
+                      var savePasswordButtons = document.querySelectorAll(".save-password-btn");
+                      savePasswordButtons.forEach(function (button) {
+                          button.addEventListener("click", function () {
+                              // Get the modal index from the data attribute
+                              var modalIndex = this.getAttribute("data-modal-index");
+                              // Call the edit_password function with the modal index
+                              edit_password(modalIndex);
+                          });
+                      });
+                  });
+ 
+                </script>
+                {% endfor %}
+
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+        
+      </div>
+      
+      
     </div>
   </div>
 

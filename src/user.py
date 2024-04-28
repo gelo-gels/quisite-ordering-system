@@ -411,34 +411,3 @@ def search_MyOrders():
     response.status_code = 200
     return response
 
-@costumer.route('/top_up', methods=['POST'])
-@login_required
-def top_up():
-    UID = session['user_info']['UID']
-    try:
-        value = int(request.form['value'])
-        if value <= 0:
-            flash('Invalid value')
-            return redirect(url_for('main.userpage'))
-    except ValueError:
-        flash('Invalid value')
-        return redirect(url_for('main.userpage'))
-
-    db = get_db()
-    # update Users
-    db.cursor().execute("""
-        update Users
-        set U_balance = U_balance + ?
-        where UID = ?
-    """, (value, UID))
-
-    # update Transaction_Record
-    db.cursor().execute("""
-        insert into Transaction_Record(T_action, T_amount, T_Subject, T_Object)
-        values (?, ?, ?, ?)
-    """, (2, value, UID, UID))
-
-    db.commit()
-
-    flash('Top-up successful')
-    return redirect(url_for('main.userpage'))

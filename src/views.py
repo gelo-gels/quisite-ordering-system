@@ -105,9 +105,14 @@ def adminpage():
             where P_owner = ?""", (UID,)
     ).fetchall()
 
+    costumer_info = db.cursor().execute(
+        """ select *
+            from Users"""
+    ).fetchall()
+
     image_info = [tple['P_image'].decode("utf-8") for tple in product_info]
 
-    return render_template("adminpage.html", user_info=user_info, shop_info=shop_info, product_info=product_info, image_info=image_info)
+    return render_template("adminpage.html", user_info=user_info, shop_info=shop_info, product_info=product_info, image_info=image_info, costumer_info=costumer_info)
 
 
 
@@ -142,6 +147,11 @@ def userpage():
     image_info = [tple['P_image'].decode("utf-8") for tple in product_info]
 
     return render_template("userpage.html", user_info=user_info, shop_info=shop_info, product_info=product_info, image_info=image_info)
+
+@main.route("/sign-up.html")
+def sign_up():
+    return render_template("sign-up.html")
+
 
 
 
@@ -179,41 +189,41 @@ def userpage():
 #     return render_template("nav.html", user_info=user_info, shop_info=shop_info, product_info=product_info, image_info=image_info)
 
 
-@main.route("/edit_location", methods=['POST'])
-@login_required
-def edit_location():
-    user_info = session.get('user_info')
-    UID = user_info['UID']
-    latitude = request.form['latitude']
-    longitude = request.form['longitude']
+# @main.route("/edit_location", methods=['POST'])
+# @login_required
+# def edit_location():
+#     user_info = session.get('user_info')
+#     UID = user_info['UID']
+#     latitude = request.form['latitude']
+#     longitude = request.form['longitude']
 
-    # check any blanks:
-    for k, v in request.form.items():
-        if v == '':
-            flash(f"Please check: '{k}' is not filled")
-            return redirect(url_for("main.nav"))
+#     # check any blanks:
+#     for k, v in request.form.items():
+#         if v == '':
+#             flash(f"Please check: '{k}' is not filled")
+#             return redirect(url_for("main.nav"))
 
-    # check validity
-    try:
-        latitude, longitude = float(latitude), float(longitude)
-    except ValueError:
-        flash("Please check: locations can only be float")
-        return redirect(url_for("main.nav"))
+#     # check validity
+#     try:
+#         latitude, longitude = float(latitude), float(longitude)
+#     except ValueError:
+#         flash("Please check: locations can only be float")
+#         return redirect(url_for("main.nav"))
 
-    if not (-90 <= int(latitude) <= 90 and -180 <= int(longitude) <= 180):
-        flash("Please check: locations not possible")
-        return redirect(url_for("main.nav"))
+#     if not (-90 <= int(latitude) <= 90 and -180 <= int(longitude) <= 180):
+#         flash("Please check: locations not possible")
+#         return redirect(url_for("main.nav"))
 
-    # update location
-    db = get_db()
-    db.cursor().execute("""
-        update Users
-        set U_latitude = ?, U_longitude = ?
-        where UID = ?
-    """, (latitude, longitude, UID))
-    db.commit()
+#     # update location
+#     db = get_db()
+#     db.cursor().execute("""
+#         update Users
+#         set U_latitude = ?, U_longitude = ?
+#         where UID = ?
+#     """, (latitude, longitude, UID))
+#     db.commit()
 
-    return redirect(url_for('main.nav'))
+#     return redirect(url_for('main.nav'))
 
 
 
