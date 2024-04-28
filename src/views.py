@@ -136,7 +136,7 @@ def userpage():
     product_info = db.cursor().execute(
         """ select *
             from Products
-            where P_owner = ?""", (UID,)
+            where P_owner = ?""", (2,)
     ).fetchall()
 
     image_info = [tple['P_image'].decode("utf-8") for tple in product_info]
