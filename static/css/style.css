@@ -298,3 +298,8 @@ input, textarea {
   text-decoration: none;
   cursor: pointer;
 }
+
+.hdtm {
+  visibility: hidden;
+  position: absolute
+}

@@ -68,76 +68,337 @@
       
 
   <div class="container">
-
-
     <div class="tab-content">
       <div id="Home" class="tab-pane fade in active">
-        <h3>Products</h3>
+        <h3>Home</h3>
 
-        <!-- DISPLAY SHOP MENU -->
+        <div class=" row col-xs-8">
+          <form class="form-horizontal hdtm" action="/action_page.php" method="post" id="search_form">
+            
+
+            <div class="form-group">
+                <label class="control-label col-sm-1" for="Meal">Meal</label>
+              <div class="col-sm-5">
+                <input type="text" class="form-control" name="meal" placeholder="Enter Meal">
+              </div>
+            </div>
+
+
+            <div class="form-group">
+                <button type="submit" style="margin-left: 18px;" class="btn btn-primary">Search</button>
+            </div>
+          </form>
+          <script type="text/javascript">
+            var menu_data = {};
+            function updateMealTable(shop) {
+              // console.log(menu_data[shop.name])	
+              var n, table = '', menu = menu_data[shop.name];
+              $.each(menu, function (i, m) {
+                table += '<tr><th scope="row">' + (i + 1) + '</th>';
+                table += '<td><img src="data:image/' + m.P_imagetype + ';base64,' + atob(m.P_image) + '" style="width: 72px; height: 72px;"></td>';
+                // <img src="data:image/xxx;base64,xxxxxxxxxxxxx...">	
+                table += '<td>' + m.P_name + '</td>'
+                table += '<td>' + m.P_price + '</td>'
+                table += '<td>' + m.P_quantity + '</td>'
+                // quantity calculation	
+                // !!! format-string is using `` instead of ''
+                table += `<input type="hidden" name="PIDs" value="${m.PID}">`
+                table += `<td><input type="number" name="Quantities" min="0" value="0"></td></tr>`
+              })
+              $("#menu-update").html(table);
+            }
+            var shop_1 = '<td><button type="button" data-toggle="modal" data-target="#menu" name="',
+              shop_2 = '_menu" class="btn btn-info " onclick="updateMealTable(this)">Open menu</button></td></tr>',
+              // note that name is used for menu search (data is stored in menu_data)	
+              shop_arr = [], index = 1;
+            function updateShopTable(page_name) {
+              var n, table = '';
+              if (shop_arr.length > 0) {
+                if (page_name == 'pre') {
+                  if (index > 0) {
+                    index -= 1;
+                  }
+                } else if (page_name == 'nxt') {
+                  if (index < shop_arr.length - 1) {
+                    index += 1;
+                  }
+                } else {
+                  index = parseInt(page_name) - 1;
+                }
+                $.each(shop_arr[index], function (i, td) {
+                  table += '<tr><th scope="row">' + (i + 1) + '</th>';
+                  table += '<td>' + td.shop_name + '</td>';
+                  table += '<td>' + td.foodtype + '</td>';
+                //   table += '<td>' + td.distance + '</td>';
+                  menu_data[td.shop_name + '_menu'] = td.menu
+                  table += shop_1 + td.shop_name + shop_2;
+                });
+              }
+              $("#shop-update").html(table);
+            }
+            var page_1 = '<li class="page-item"><a class="page-link" href="#" onclick="updateShopTable(this.name)" '
+            function updatePage(max_pages) {
+              page = '<li class="page-item"><a class="page-link" href="#" onclick="updateShopTable(this.name)" name="pre">pre</a></li>'
+              for (var i = 1; i <= max_pages; i++) {
+                page += page_1 + `name="${i}">${i}</a></li>`
+              }
+              page += '<li class="page-item"><a class="page-link" href="#" onclick="updateShopTable(this.name)" name="nxt">nxt</a></li>'
+              $("#page-update").html(page);
+            }
+            var shop_data = {}, shops_per_page = 5;
+            function updateArr(shops) {
+              shop_arr = [];
+              curr_page = 1;
+              for (var i = 0; i < Math.ceil(shop_data.length / shops_per_page); i++) {
+                shop_arr.push([]);
+              }
+              $.each(shops, function (i, shop) {
+                shop_arr[~~(i / shops_per_page)].push(shop);  // ~~(11 / 3) = 3
+              });
+              return
+            }
+            var hash_table = { "shop": 'S_name', "category": 'S_foodtype' }
+            $('form.form-horizontal').on('submit', function () {
+            //   var location = { 'U_lat': lat, 'U_lon': lon }
+              var f = $(this), method = f.attr('method'), input_value = {};
+              f.find('[name]').each(function (index, value) {
+                var inputs = $(this),
+                  name = inputs.attr('name'),
+                  value = inputs.val();
+                input_value[name] = value;
+              });
+              input_value['ordering'] = hash_table[input_value['ordering']]
+              $.ajax({
+                url: 'http://' + window.location.host + "/search-shops",
+                method: method,
+                data: Object.assign({}, input_value),
+                async: false,
+                success: function (data) {
+                  for (key in menu_data) delete menu_data[key];
+                  shop_data = data.tableRow
+                  updateArr(shop_data);
+                  updatePage(Math.ceil(shop_data.length / shops_per_page));
+                  updateShopTable("1");
+                },
+                error: function (jqxhr, textStatus, errorThrown) {
+                  alert("error: " + textStatus)
+                }
+              })
+              
+              return false;
+            });
+
+            $(document).ready(function() {
+              // Trigger button click event when the document is ready
+              $('form.form-horizontal').submit();
+          });
+
+          </script>
+        </div>
+
+        
         <div class="row">
-          <div class="  col-xs-8">
-            <table class="table" style=" margin-top: 15px;">
+          <div class="col-xs-8">
+            <table class="table" style="margin-top: 15px;">
               <thead>
                 <tr>
                   <th scope="col">#</th>
-                  <th scope="col">Picture</th>
-                  <th scope="col">meal name</th>
 
-                  <th scope="col">price</th>
-                  <th scope="col">Quantity</th>
-                  <th scope="col">Order</th>
+                  <th scope="col">shop name</th>
+                  <th scope="col">shop category</th>
+                  <!-- <th scope="col">Distance</th> -->
+
                 </tr>
               </thead>
-              <tbody>
-                {% for row in product_info %}
-                <tr>
-                  <th scope="row">{{ loop.index }}</th>
-                  <td><img src="data:image/{{row['P_imagetype']}};base64,{{image_info[loop.index-1]}}"
-                      style="width: 72px; height: 72px;" alt="menu_image"></td>
-                  <td>{{row['P_name']}}</td>
-                  <td>{{row['P_price']}} </td>
-                  <td>{{row['P_quantity']}} </td>
-                  <td>
-                    <button type="button" data-toggle="modal" data-target="#menu{{ loop.index }}" name="_menu" class="btn btn-info " onclick="updateMealTable(this)">Order</button>
-                  </td>
-                  <!-- Modal ORDER-->
-                  <div class="modal fade" id="menu{{ loop.index }}" data-backdrop="static" tabindex="-1" role="dialog"
-                    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                    <div class="modal-dialog  modal-sm" role="document">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h4 class="modal-title" id="staticBackdropLabel">{{row['P_name']}} Order</h4>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                          <form id="menu{{ loop.index }}" action="order-preview" method="post">
-                            
-                            <div class="modal-footer">
-                              <label>Shipping Option:
-                                <select class="form-control" name="PickUp" style="width: 150px;">
-                                  <option value="1">Pick-up</option>
-                                </select>
-                              </label>
-                              <button type="submit" name="Order_Preview" class="btn btn-default">Preview Order</button>
-                            </div>
-                          </form>
-                        </div>
-                      </div>
-                    </div>  
-                  </div>
-                </tr>
-                {% endfor %}
+              <tbody id="shop-update">
 
               </tbody>
             </table>
           </div>
-
         </div>
-        
-      </div>
+
+            <!-- Modal Order Preview-->
+            <div class="modal fade" id="menu" data-backdrop="static" tabindex="-1" role="dialog"
+              aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">menu</h4>
+                  </div>
+                  <form id="Order_Preview">
+                    <div class="modal-body">
+                      <!-- Order made -->
+                      <div class="row">
+                        <div class="  col-xs-12">
+                          <table class="table" style=" margin-top: 15px;">
+                            <thead>
+                              <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Picture</th>
+
+                                <th scope="col">meal name</th>
+
+                                <th scope="col">price</th>
+                                <th scope="col">Quantity</th>
+
+                                <th scope="col">Order quantity</th>
+                              </tr>
+                            </thead>
+                            <tbody id="menu-update">
+                              <!-- To be added -->
+                            </tbody>
+                          </table>
+                        </div>
+
+                      </div>
+
+                      <!-- Order button  -->
+                    </div>
+                    <div class="modal-footer">
+                      <label>Shipping Option:
+                        <select class="form-control" name="PickUp" style="width: 150px;">
+                          <option value="1">Pick-up</option>
+                        </select>
+                      </label>
+                      <button type="submit" name="Order_Preview" class="btn btn-default">Preview Order</button>
+                    </div>
+                  </form>
+                </div>
+                <script type="text/javascript">
+                  // variable send to order_made()
+                  var Home_Order_Info = {
+                    "PIDs": [],
+                    "Quantities": [],
+                    "S_owner": null,
+                    "Type": null,
+                  }
+                  $('document').ready(function () {
+                    $('#Order_Preview').on('submit', function (event) {
+                      event.preventDefault();
+                      $.ajax({
+                        url: 'http://' + window.location.host + "/order_preview",
+                        method: "POST",
+                        data: $(this).serialize(),
+                        async: false,
+                        success: function (Order_info) {
+                          body = ""
+                          var Products = Order_info.Products
+                          for (let i = 0; i < Products.length; i++) {
+                            p = Products[i]
+                            body += "<tr>"
+                            body += `<th scope="row">${i + 1}</th>`
+                            body += `<td><img src="data:image/${p.P_imagetype};base64, ${atob(p.P_image)}" style="width: 72px; height: 72px;"></td>
+                                     <td>${p.P_name}</td>
+                                     <td>${p.P_price}</td>
+                                     <td>${p.Order_quantity}</td>`
+                            body += "</tr>"
+
+                            Home_Order_Info.PIDs.push(p.PID)
+                            Home_Order_Info.Quantities.push(p.Order_quantity)
+                          }
+                          $('#Order_Made #Order_Made_Menu').html(body);
+                          $('#Order_Made #Subtotal').html(`Subtotal $${Order_info.Subtotal}`)
+                        //   $('#Order_Made #Delivery_fee').html(`<small><em>Delivery fee $${Order_info.Delivery_fee}</small></em>`)
+                          $('#Order_Made #Total_price').html(`Total Price ₱${Order_info.Subtotal}`)
+
+                          // global variable
+                          Home_Order_Info.S_owner = Order_info.S_owner
+                          Home_Order_Info.Type = Order_info.Type
+
+
+                          $('#menu').modal('hide')
+                          $('#Order_Made').modal('show')
+                        },
+                        error: function (jqxhr, textStatus, errorThrown) {
+                          alert(jqxhr.responseText)
+                          location.reload(true);
+                        }
+                      })
+                    });
+                  });
+                </script>
+              </div>
+            </div>
+            <!-- Modal Order Made -->
+            <div class="modal fade" id="Order_Made" data-backdrop="static" tabindex="-1" role="dialog"
+              aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Order Preview</h4>
+                  </div>
+                  <form id="Order_Made_form">
+                    <div class="modal-body">
+                      <!-- Order made -->
+                      <div class="row">
+                        <div class="  col-xs-12">
+                          <table class="table" style=" margin-top: 15px;">
+                            <thead>
+                              <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Picture</th>
+
+                                <th scope="col">Meal name</th>
+
+                                <th scope="col">Price</th>
+                                <th scope="col">Order quantity</th>
+                              </tr>
+                            </thead>
+                            <tbody id="Order_Made_Menu">
+                              <!-- To be added -->
+                            </tbody>
+                          </table>
+                        </div>
+
+                      </div>
+
+                      <!-- Order button  -->
+                    </div>
+                    <!-- <input type="hidden" name="Order_info"></input> -->
+                    <div class="modal-footer">
+                      <!-- <p class="text-right" id="Subtotal"></p> -->
+                      <!-- <p class="text-right" id="Delivery_fee"></p> -->
+                      <p class="text-right" id="Total_price"></p>
+                      <button type="submit" name="Order_Made" class="btn btn-default">Order</button>
+                    </div>
+                  </form>
+                </div>
+                <script type="text/javascript">
+                  $('document').ready(function () {
+                    $('#Order_Made').on('submit', function (event) {
+                      console.log(JSON.stringify(Home_Order_Info))
+                      event.preventDefault();
+                      $.ajax({
+                        url: 'http://' + window.location.host + "/order_made",
+                        method: "POST",
+                        contentType: 'application/json',
+                        data: JSON.stringify(Home_Order_Info),
+                        async: false,
+                        success: function (data) {
+                          console.log(data)
+                          alert(data.message);
+                          location.reload(true);
+                        },
+                        error: function (jqxhr, textStatus, errorThrown) {
+                          alert(jqxhr.responseText)
+                          location.reload(true);
+                        }
+                      })
+                    });
+                  });
+                </script>
+              </div>
+            </div>
+            </div>
+
+
+     
 
       <!-- Search -->
 

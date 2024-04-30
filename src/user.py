@@ -400,34 +400,43 @@ def search_MyOrders():
     response.status_code = 200
     return response
 
-@costumer.route("/order-number", methods=['POST'])
-# Function to generate a 3-digit order number
-def generate_order_number():
-    return random.randint(100, 999)
+# @costumer.route("/order-number", methods=['POST'])
+# # Function to generate a 3-digit order number
+# def generate_order_number():
+#     return random.randint(100, 999)
 
-# Function to check if the generated order number already exists in the Orders table
-def is_order_number_unique(order_number, cursor):
-    cursor.execute("SELECT COUNT(*) FROM Orders WHERE OrderNumber = ?", (order_number,))
-    count = cursor.fetchone()[0]
-    return count == 0
+# # Function to check if the generated order number already exists in the Orders table
+# def is_order_number_unique(order_number, cursor):
+#     cursor.execute("SELECT COUNT(*) FROM Orders WHERE OrderNumber = ?", (order_number,))
+#     count = cursor.fetchone()[0]
+#     return count == 0
 
-# Function to insert a new order into the Orders table
-def insert_order_into_database(cursor, order_number, other_data):
-    cursor.execute("INSERT INTO Orders (OrderNumber, OtherData) VALUES (?, ?)", (order_number, other_data))
+# # Function to insert a new order into the Orders table
+# def insert_order_into_database(cursor, order_number, other_data):
+#     cursor.execute("INSERT INTO Orders (OrderNumber, OtherData) VALUES (?, ?)", (order_number, other_data))
 
-# Connect to the SQLite database
-conn = sqlite3.connect('your_database.db')
-cursor = conn.cursor()
+# # Connect to the SQLite database
+# conn = sqlite3.connect('your_database.db')
+# cursor = conn.cursor()
 
-# Generate a unique order number
-order_number = generate_order_number()
-while not is_order_number_unique(order_number, cursor):
-    order_number = generate_order_number()
+# # Generate a unique order number
+# order_number = generate_order_number()
+# while not is_order_number_unique(order_number, cursor):
+#     order_number = generate_order_number()
 
-# Insert the order into the database
-other_data = "Other relevant data"  # Replace this with your actual data
-insert_order_into_database(cursor, order_number, other_data)
+# # Insert the order into the database
+# other_data = "Other relevant data"  # Replace this with your actual data
+# insert_order_into_database(cursor, order_number, other_data)
 
-# Commit the transaction and close the connection
-conn.commit()
-conn.close()
+# # Commit the transaction and close the connection
+# conn.commit()
+# conn.close()
+
+def get_products_from_db():
+
+    db = get_db()
+    rst = db.cursor().execute(
+            "SELECT * FROM Products"
+        ).fetchall()
+
+    # conn.close()
