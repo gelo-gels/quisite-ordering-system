@@ -30,6 +30,8 @@ CREATE TABLE
 CREATE TABLE
     if NOT EXISTS Orders(
         OID INTEGER PRIMARY KEY AUTOINCREMENT,
+        O_unique_number INT NOT NULL,
+        -- generates unique order number
         O_status INT NOT NULL,
         -- 0: not done, 1: done, -1: canceled
         O_start_time datetime DEFAULT (datetime('now', 'localtime')) NOT NULL,

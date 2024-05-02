@@ -29,6 +29,7 @@ def search_ShopOrders():
         rst = db.cursor().execute(
             '''
             select OID,
+                O_unique_number,
                 case
                     when O_status = 0 then 'Not finished'
                     when O_status = 1 then 'Finished'
@@ -44,8 +45,8 @@ def search_ShopOrders():
             where SID = ?
             ''', (SID[0],)
         ).fetchall()
-        for OID, Status, start_time, end_time, S_name, O_amount in rst:
-            append({'Status': Status, 'start_time': start_time, 'end_time': end_time, 'S_name': S_name,
+        for OID, unique_number, Status, start_time, end_time, S_name, O_amount in rst:
+            append({'unique_number': unique_number, 'Status': Status, 'start_time': start_time, 'end_time': end_time, 'S_name': S_name,
                     'OID': OID, 'total_price': O_amount})
     print(table['tableRow'])
     response = jsonify(table)
@@ -338,6 +339,8 @@ def delete_account():
 @login_required
 def top_up():
     UID = session['user_info']['UID']
+    costumer_UID = request.form['costumer_UID']
+
     try:
         value = int(request.form['value'])
         if value <= 0:
@@ -353,13 +356,13 @@ def top_up():
         update Users
         set U_balance = U_balance + ?
         where UID = ?
-    """, (value, UID))
+    """, (value, costumer_UID))
 
     # update Transaction_Record
     db.cursor().execute("""
         insert into Transaction_Record(T_action, T_amount, T_Subject, T_Object)
         values (?, ?, ?, ?)
-    """, (2, value, UID, UID))
+    """, (2, value, UID, costumer_UID))
 
     db.commit()
 

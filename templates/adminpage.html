@@ -507,7 +507,7 @@
             var table = '', filter = document.getElementById("shop-order-status").value;
             $.each(ShopOrders, function (i, order) {
               if (filter != 'All' && order.Status != filter) { return; }
-              table += '<tr><th scope="row">' + order.OID + '</th>';
+              table += '<tr><th scope="row">' + order.unique_number + '</th>';
               table += '<td>' + order.Status + '</td>';
               table += '<td>' + order.start_time + '</td>';
               table += '<td>' + order.end_time + '</td>';
@@ -726,10 +726,13 @@
                         </div>
                         <div class="modal-body">
                           <form id="top_up{{ loop.index }}" action="top_up" method="post">
-                            <input type="number" class="form-control" name="value" placeholder="enter add value">
-                            <div class="modal-footer">
-                              <button type="submit" class="btn btn-default">Add</button>
-                            </div>
+                            <input name="costumer_UID" type="hidden" value="{{row['UID']}}">
+                            
+                              <input type="number" class="form-control" name="value" placeholder="enter add value">
+                              <div class="modal-footer">
+                                <button type="submit" class="btn btn-default">Add</button>
+                              </div>
+                              
                           </form>
                         </div>
                       </div>

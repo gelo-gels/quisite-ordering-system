@@ -1,25 +1,22 @@
-import math
+# Function to read the current number from a file
+def read_current_number():
+    try:
+        with open('storage_number.txt', 'r') as file:
+            return int(file.read().strip())
+    except FileNotFoundError:
+        return 1000  # Default starting number if file doesn't exist
 
-def distance_between_locations(lat1, lon1, lat2, lon2):
-    '''
-    calculates distance between two locations
-    '''
+# Function to write the current number to a file
+def write_current_number(number):
+    with open('storage_number.txt', 'w') as file:
+        file.write(str(number))
 
-    # approximate radius of earth in km
-    R = 6373.0
-
-    lat1 = math.radians(float(lat1))
-    lon1 = math.radians(float(lon1))
-    lat2 = math.radians(float(lat2))
-    lon2 = math.radians(float(lon2))
-
-    dlon = lon2 - lon1
-    dlat = lat2 - lat1
-
-    a = math.sin(dlat / 2)**2 + math.cos(lat1) * \
-        math.cos(lat2) * math.sin(dlon / 2)**2
-    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
-
-    distance = R * c
-
-    return str(distance)
+# Function to generate a three-digit number
+def unique_order_number():
+    current_number = read_current_number()
+    if current_number == 9999:
+        current_number = 1000  # Reset to 1000 when it reaches 9999
+    else:
+        current_number += 1  # Increment the current number
+    write_current_number(current_number)  # Save the updated current number to file
+    return current_number
