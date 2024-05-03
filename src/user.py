@@ -375,6 +375,7 @@ def search_MyOrders():
     rst = db.cursor().execute(
         '''
         select 
+            O_unique_number,
             case
                 when O_status = 0 then 'Not finished'
                 when O_status = 1 then 'Finished'
@@ -392,8 +393,8 @@ def search_MyOrders():
     # print("Result set:", rst)  # Debugging
     table = {'tableRow': []}
     append = table['tableRow'].append
-    for Status, start_time, end_time, S_name, OID, O_amount in rst:
-        append({'Status': Status, 'start_time': start_time, 'end_time': end_time, 'S_name': S_name,
+    for unique_number, Status, start_time, end_time, S_name, OID, O_amount in rst:
+        append({'unique_number': unique_number, 'Status': Status, 'start_time': start_time, 'end_time': end_time, 'S_name': S_name,
                 'OID': OID, 'total_price': O_amount})
     print("Table:", table['tableRow'])
     response = jsonify(table)

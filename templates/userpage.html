@@ -1038,7 +1038,7 @@
             var table = '', filter = document.getElementById("order-status").value;
             $.each(MyOrders, function (i, order) {
               if (filter != 'All' && order.Status != filter) { return; }
-              table += '<tr><th scope="row">' + order.OID + '</th>';
+              table += '<tr><th scope="row">' + order.unique_number + '</th>';
               table += '<td>' + order.Status + '</td>';
               table += '<td>' + order.start_time + '</td>';
               table += '<td>' + order.end_time + '</td>';
