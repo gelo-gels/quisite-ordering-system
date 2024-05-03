@@ -1,6 +1,5 @@
 import os
 import sqlite3
-from .math import distance_between_locations
 from flask import Flask, g
 
 sqlite3.enable_callback_tracebacks(True)
@@ -23,7 +22,7 @@ def get_db():
     if db is None:
         db = sqlite3.connect(DATABASE)
         db.row_factory = sqlite3.Row
-        db.create_function('_GIO_DIS', 4, distance_between_locations)
+        db.create_function('_GIO_DIS', 4, 0)
         g._database = db
     db.cursor().execute("PRAGMA foreign_keys=ON")
     return db

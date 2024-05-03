@@ -1,7 +1,7 @@
 import base64
 import sqlite3
-import random
 import json
+from .math import unique_order_number
 from .login import login_required
 from . import get_db, DISTANCE_BOUNDARY
 from flask import (
@@ -189,10 +189,11 @@ def order_made():
             'Subtotal': Subtotal,
             # 'Delivery_fee': Delivery_fee,
         })
+        order_number = unique_order_number()
         rst = db.cursor().execute('''
-            insert into Orders (O_status, O_end_time, O_amount, O_type, O_details, SID)
-            values (?, ?, ?, ?, ?, ?)
-        ''', (0, None, Total, json_data['Type'], details_str, SID))
+            insert into Orders (O_unique_number, O_status, O_end_time, O_amount, O_type, O_details, SID)
+            values (?, ?, ?, ?, ?, ?, ?)
+        ''', (order_number, 0, None, Total, json_data['Type'], details_str, SID))
             #  (0, None, distance, Total, json_data['Type'], details_str, SID))
 
         # update Process_Order
@@ -374,6 +375,7 @@ def search_MyOrders():
     rst = db.cursor().execute(
         '''
         select 
+            O_unique_number,
             case
                 when O_status = 0 then 'Not finished'
                 when O_status = 1 then 'Finished'
@@ -391,8 +393,8 @@ def search_MyOrders():
     # print("Result set:", rst)  # Debugging
     table = {'tableRow': []}
     append = table['tableRow'].append
-    for Status, start_time, end_time, S_name, OID, O_amount in rst:
-        append({'Status': Status, 'start_time': start_time, 'end_time': end_time, 'S_name': S_name,
+    for unique_number, Status, start_time, end_time, S_name, OID, O_amount in rst:
+        append({'unique_number': unique_number, 'Status': Status, 'start_time': start_time, 'end_time': end_time, 'S_name': S_name,
                 'OID': OID, 'total_price': O_amount})
     print("Table:", table['tableRow'])
     response = jsonify(table)
@@ -400,37 +402,6 @@ def search_MyOrders():
     response.status_code = 200
     return response
 
-# @costumer.route("/order-number", methods=['POST'])
-# # Function to generate a 3-digit order number
-# def generate_order_number():
-#     return random.randint(100, 999)
-
-# # Function to check if the generated order number already exists in the Orders table
-# def is_order_number_unique(order_number, cursor):
-#     cursor.execute("SELECT COUNT(*) FROM Orders WHERE OrderNumber = ?", (order_number,))
-#     count = cursor.fetchone()[0]
-#     return count == 0
-
-# # Function to insert a new order into the Orders table
-# def insert_order_into_database(cursor, order_number, other_data):
-#     cursor.execute("INSERT INTO Orders (OrderNumber, OtherData) VALUES (?, ?)", (order_number, other_data))
-
-# # Connect to the SQLite database
-# conn = sqlite3.connect('your_database.db')
-# cursor = conn.cursor()
-
-# # Generate a unique order number
-# order_number = generate_order_number()
-# while not is_order_number_unique(order_number, cursor):
-#     order_number = generate_order_number()
-
-# # Insert the order into the database
-# other_data = "Other relevant data"  # Replace this with your actual data
-# insert_order_into_database(cursor, order_number, other_data)
-
-# # Commit the transaction and close the connection
-# conn.commit()
-# conn.close()
 
 def get_products_from_db():
 
