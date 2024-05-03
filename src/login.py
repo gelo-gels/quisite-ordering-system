@@ -50,7 +50,7 @@ def login():
     else:
         # login successfully
         session['user_info'] = dict(user_info)
-        return redirect(url_for('main.userpage'))
+        return redirect(url_for('main.productlistpage'))
 
     
 

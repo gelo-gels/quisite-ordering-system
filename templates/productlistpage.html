@@ -54,10 +54,10 @@
         <div class="col-md-6" style="text-align: right">
             <div class="nav-tabs" style="border: 0 !important">
               <a href="/productlistpage.html">Home</a>
-                <a href="#Search" class="btn__standard" style="margin-right: 10px">
+                <a href="/userpage.html" class="btn__standard" style="margin-right: 10px">
                     <img src="{{ url_for('main.get_search_image') }}" style="width: 20px" />
                 </a>
-                <a href="#Profile" class="btn__standard">
+                <a href="/userpage.html#Profile" class="btn__standard">
                     <img src="{{ url_for('main.get_user_image') }}" style="width: 20px" />
                 </a>
             </div>
@@ -69,17 +69,11 @@
 
   <div class="container">
     <div class="tab-content">
-      
-
-
-     
-
-      <!-- Search -->
-
-      <div id="Search" class="tab-pane fade in active">
-        <h3>Search</h3>
-        <div class=" row  col-xs-8">
-          <form class="form-horizontal" action="/action_page.php" method="post" id="search_form">
+      <div id="Home" class="tab-pane fade in active">
+        <h3>Home</h3>
+        
+        <div class=" row col-xs-8">
+          <form class="form-horizontal hdtm" action="/action_page.php" method="post" id="search_form">
             
 
             <div class="form-group">
@@ -190,48 +184,21 @@
                   alert("error: " + textStatus)
                 }
               })
+              
               return false;
             });
 
-            // var hash_table = { "shop": 'S_name', "distance": 'manhattan', "category": 'S_foodtype' }
-            // $('form.form-horizontal').on('submit', function () {
-            //   var location = { 'U_lat': lat, 'U_lon': lon }
-            //   var f = $(this), method = f.attr('method'), input_value = {};
-            //   f.find('[name]').each(function (index, value) {
-            //     var inputs = $(this),
-            //       name = inputs.attr('name'),
-            //       value = inputs.val();
-            //     input_value[name] = value;
-            //   });
-            //   if (input_value['price_low'] == '') {
-            //     input_value['price_low'] = 0
-            //   }
-            //   input_value['ordering'] = hash_table[input_value['ordering']]
-            //   input_value['desc'] = document.getElementById("desc").checked
-            //   $.ajax({
-            //     url: 'http://' + window.location.host + "/search-shops",
-            //     method: method,
-            //     data: Object.assign({}, input_value, location),
-            //     async: false,
-            //     success: function (data) {
-            //       for (key in menu_data) delete menu_data[key];
-            //       shop_data = data.tableRow
-            //       updateArr(shop_data);
-            //       updatePage(Math.ceil(shop_data.length / shops_per_page));
-            //       updateShopTable("1");
-            //     },
-            //     error: function (jqxhr, textStatus, errorThrown) {
-            //       alert("error: " + textStatus)
-            //     }
-            //   })
-            //   return false;
-            // });
+            $(document).ready(function() {
+              // Trigger button click event when the document is ready
+              $('form.form-horizontal').submit();
+          });
+
           </script>
         </div>
 
         
         <div class="row">
-          <div class="  col-xs-8">
+          <div class="col-xs-8">
             <table class="table" style="margin-top: 15px;">
               <thead>
                 <tr>
@@ -247,6 +214,8 @@
 
               </tbody>
             </table>
+          </div>
+        </div>
 
             <!-- Modal Order Preview-->
             <div class="modal fade" id="menu" data-backdrop="static" tabindex="-1" role="dialog"
@@ -424,341 +393,9 @@
                     });
                   });
                 </script>
-              </div>
             </div>
-            <!-- <ul class="pagination" id="page-update">
-              <li class="page-item"><a class="page-link" href="#">pre</a></li>
-              <li class="page-item"><a class="page-link" href="#">1</a></li>
-              <li class="page-item"><a class="page-link" href="#">nxt</a></li>
-            </ul> -->
-          </div>
-
-        </div>
-      </div>
-
-
-      <!-- Profile -->
-
-      <div id="Profile" class="tab-pane fade">
-        <h3>Profile</h3>
-        <div class="row">
-          <div class="col-xs-12">
-            <div>
-              Username: {{user_info['U_account']}}
-            </div>
-            <div>
-              Name: {{user_info['U_name']}}
-            </div>
-            <div>
-              Account Type: {{'manager' if user_info['U_type'] else
-              'user'}}
-            </div>
-            <div>
-              PhoneNumber: {{user_info['U_phone']}}
-            </div>
-            <div>
-              
-            walletbalance: {{user_info['U_balance']}}
-            </div>
-            <!-- Modal -->
-            <button type="button " style="margin-left: 5px;" class=" btn btn-info " data-toggle="modal"
-              data-target="#top_up">Top Up</button>
-            <div class="modal fade" id="top_up" data-backdrop="static" tabindex="-1" role="dialog"
-              aria-labelledby="staticBackdropLabel" aria-hidden="true">
-              <div class="modal-dialog  modal-sm">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Top Up</h4>
-                  </div>
-                  <div class="modal-body">
-                    <form id="top_up" action="top_up" method="post">
-                      <input type="number" class="form-control" name="value" placeholder="enter add value">
-                      <div class="modal-footer">
-                        <button type="submit" class="btn btn-default">Add</button>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="nav-tabs" style="border: 0 !important">
-              <a href="#MyOrder" onclick="searchMyOrders()">My Orders</a>
-            </div>
-
-            <form align="right" name="form1" method="post" action="{{url_for('user.logout')}}">
-              <label class="logoutLblPos">
-                <input name="Logout" type="submit" style="margin-left: 5px;" class=" btn btn-info " id="Logout" value="Logout">
-              </label>
-            </form>
-
-
           </div>
         </div>
-      </div>
-
-
-      <!-- MyOrder -->
-      <div id="MyOrder" class="tab-pane fade">
-        <h3>My Orders</h3>
-        <!-- HOW-TO: Filter table rows based on selected value
-          https://stackoverflow.com/questions/41554154/filter-table-rows-based-on-select-value -->
-        <select class="form-control" name="Status" id="order-status" style="width:150px; "
-          onchange="updateMyOrderTable()">
-          <option>All</option>
-          <option>Finished</option>
-          <option>Not finished</option>
-          <option>Canceled</option>
-        </select>
-        <div class="row">
-          <div class="col-xs-8" id="MyOrder-table">
-            <table class="table" style="margin-top: 15px;">
-              <thead>
-                <tr>
-                  <th scope="col">Order ID</th>
-                  <th scope="col">Status</th>
-                  <th scope="col">Start Time</th>
-                  <th scope="col">End Time</th>
-                  <th scope="col">Shop Name</th>
-                  <th scope="col">Total Price</th>
-                  <th scope="col">Order Details</th>
-                  <th scope="col">Action</th>
-                  <th scope="col">Select</th>
-                </tr>
-              </thead>
-              <tbody id="MyOrder-update">
-                <!-- for loop1 should start here -->
-                <tr>
-                  <th scope="row">1</th>
-                  <td>
-                    tmp2
-                  </td>
-                  <td>
-                    tmp3
-                  </td>
-                  <td>
-                    tmp4
-                  </td>
-                  <td>
-                    tmp5
-                  </td>
-                  <td>
-                    tmp6
-                  </td>
-                  <td>
-                    <button type="button" data-toggle="modal" data-target="#MyOrderDetail-1" class="btn btn-info ">Order
-                      Details</button>
-                  </td>
-                  <td>
-                    <button type="button" data-toggle="modal" data-target="test" name="test" class="btn btn-danger "
-                      onclick="none">Cancel Order</button>
-                  </td>
-                </tr>
-                <!-- for loop1 should end here -->
-              </tbody>
-            </table>
-            <div>
-              <button type="button" name="empty" class="btn btn-danger " onclick="batchDeleteMyOrder()">Cancel Seleted
-                Orders</button>
-            </div>
-            <!-- for loop2 should start here -->
-            <!-- Modal: MyOrderDetail-{id} -->
-            <div class="modal fade" id="MyOrderDetail-1" data-backdrop="static" tabindex="-1" role="dialog"
-              aria-labelledby="staticBackdropLabel" aria-hidden="true">
-              <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Order Details</h4>
-                  </div>
-                  <div class="modal-body">
-                    <table class="table">
-                      <thread>
-                        <tr>
-                          <th scope="col">#</th>
-                          <th scope="col">Picture</th>
-                          <th scope="col">Meal name</th>
-                          <th scope="col">Price</th>
-                          <th scope="col">Quantity</th>
-                        </tr>
-                      </thread>
-                      <tbody id="MyOrderDetail-T-1">
-                        <tr>
-                          <th scope="row">1</th>
-                          <td>tmp11</td>
-                          <td>tmp12</td>
-                          <td>tmp13</td>
-                          <td>tmp14</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">2</th>
-                          <td>tmp21</td>
-                          <td>tmp22</td>
-                          <td>tmp23</td>
-                          <td>tmp24</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                    <!-- EX: row['subtotal'] -->
-                    <!-- <p class="text-right">Subtotal $199</p>
-                    <p class="text-right"><small><em>Delivery fee $19</em></small></p>
-                    <p class="text-right">Total Price $218</p> -->
-                    <div class="modal-footer">
-                      <!-- <p class="text-right" id="Delivery_fee"></p> -->
-                      <p class="text-right" id="Total_price"></p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- for loop2 should end here -->
-          </div>
-        </div>
-        <script type="text/javascript">
-          var UID = -1;
-          // get user location
-          $(document).ready(function () {
-            $.ajax({
-              url: 'http://' + window.location.host + '/get_session',
-              type: 'GET',
-              dataType: 'json',
-              success: function (result) {
-                UID = result.user_info['UID']
-              },
-              error: function (xhr, status, error) {
-                var err = eval("(" + xhr.responseText + ")");
-                alert(err.Message + '\n' + 'http://' + window.location.host + '/get_session');
-              }
-            });
-          })
-          function deleteOrder(oid) {
-            // implement your order delete function
-            // !!! careful, use parseInt(OID) here since OID is str
-            OID = parseInt(oid);
-            $.ajax({
-              url: 'http://' + window.location.host + '/order-delete',
-              type: 'POST',
-              data: { 'OID': OID, 'is_shopowner': false },
-              dataType: 'json',
-              success: function (result) {
-                alert(result.msg);
-              },
-              error: function (jqxhr, textStatus, errorThrown) {
-                alert(jqxhr.responseText)
-              }
-            })
-            // and refresh order table
-            searchMyOrders()
-          }
-          function updateOrderDetail(OID) {
-            $.ajax({
-              url: 'http://' + window.location.host + "/order-detail",
-              method: "POST",
-              data: { 'OID': parseInt(OID), 'UID': parseInt(UID) },
-              async: false,
-              success: function (Order_info) {
-                body = ""
-                var Products = Order_info.Products
-                for (let i = 0; i < Products.length; i++) {
-                  p = Products[i]
-                  body += "<tr>"
-                  body += `<th scope="row">${i + 1}</th>`
-                  body += `<td><img src="data:image/${p.P_imagetype};base64, ${atob(p.P_image)}" style="width: 72px; height: 72px;"></td>
-                            <td>${p.P_name}</td>
-                            <td>${p.P_price}</td>
-                            <td>${p.Order_quantity}</td>`
-                  body += "</tr>"
-                }
-                $('#MyOrderDetail-1 #MyOrderDetail-T-1').html(body);
-                $('#MyOrderDetail-1 #Subtotal').html(`Subtotal $${Order_info.Subtotal}`)
-                // $('#MyOrderDetail-1 #Delivery_fee').html(`<small><em>Delivery fee $${Order_info.Delivery_fee}</small></em>`)
-                $('#MyOrderDetail-1 #Total_price').html(`Total Price ₱${Order_info.Subtotal}`)
-              },
-              error: function (jqxhr, textStatus, errorThrown) {
-                alert(jqxhr.responseText)
-              }
-            })
-          }
-          function batchDeleteMyOrder() {
-            all_succ = true;
-            has_select = false;
-            $('#MyOrder-table').find('input:checked').each(function () {
-              has_select = true;
-              OID = parseInt($(this).attr('name'))
-              $.ajax({
-                url: 'http://' + window.location.host + '/order-delete',
-                type: 'POST',
-                async: false,
-                data: { 'OID': OID, 'is_shopowner': false },
-                dataType: 'json',
-                success: function (result) {
-                  console.log(result.msg);
-                },
-                error: function (jqxhr, textStatus, errorThrown) {
-                  all_succ = false;
-                  alert(jqxhr.responseText);
-                }
-              })
-            });
-            console.log(all_succ);
-            if (all_succ && has_select) {
-              alert('Seleted orders canceled successfully');
-            }
-            searchMyOrders()
-          }
-          MyOrders = []
-          function updateMyOrderTable() {
-            var table = '', filter = document.getElementById("order-status").value;
-            $.each(MyOrders, function (i, order) {
-              if (filter != 'All' && order.Status != filter) { return; }
-              table += '<tr><th scope="row">' + order.OID + '</th>';
-              table += '<td>' + order.Status + '</td>';
-              table += '<td>' + order.start_time + '</td>';
-              table += '<td>' + order.end_time + '</td>';
-              table += '<td>' + order.S_name + '</td>';
-              table += '<td>' + order.total_price + '</td>';
-              if (order.Status == 'Not finished') {
-                not_fin = `
-                <td>
-                  <button type="button" name="${order.OID}" data-toggle="modal" data-target="test" name="test" class="btn btn-danger "
-                    onclick="deleteOrder(this.name)">Cancel Order</button>
-                </td>
-                <td>
-                  <input type="checkbox" class="form-check-input" name="${order.OID}">
-                </td>
-                `
-              } else {
-                not_fin = `<td></td><td></td>`
-              }
-              table += `
-                <td>
-                  <button type="button" name="${order.OID}" data-toggle="modal" data-target="#MyOrderDetail-1" class="btn btn-info " 
-                  onclick="updateOrderDetail(this.name)"> Order Details</button>
-                </td>
-                ${not_fin}</tr>`;
-            });
-            $("#MyOrder-update").html(table);
-          }
-          function searchMyOrders() {
-            $.ajax({
-              url: 'http://' + window.location.host + "/search-MyOrders",
-              method: "POST",
-              data: { 'UID': UID },
-              async: false,
-              success: function (data) {
-                MyOrders = data.tableRow;
-                updateMyOrderTable();
-              },
-              error: function (jqxhr, textStatus, errorThrown) {
-                alert("error: " + textStatus)
-              }
-            })
-          }
-        </script>
-      </div>
-
-
     </div>
   </div>
 
