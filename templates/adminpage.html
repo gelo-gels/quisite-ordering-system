@@ -7,18 +7,41 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/animate.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <title>Hello, world!</title>
+  <title>Quisite - Admin</title>
 </head>
 
 <body>
 
-  <nav class="navbar navbar-inverse">
+    <!-- Nav -->
+	<div class="navbar_home">
+    <div class="row">
+        <div class="col-xs-6">
+            <a href="homepage.html" class="poppins-medium branding__title btn__standard" >
+                QUISITE
+            </a>
+        </div>
+        <div class="col-xs-6" style="text-align: right">
+          <form align="right" name="form1" method="post" action="{{url_for('user.logout')}}">
+            <label class="">
+              <input style="height: 22px; padding: 0px 11px;" name="Logout" type="submit" class=" btn btn-info " id="Logout" value="Logout">
+            </label>
+          </form>
+        </div>
+    </div>
+</div>
+
+
+
+  <!-- <nav class="navbar navbar-inverse">
     <div class="container-fluid">
 
       <div class="navbar-header">
@@ -26,13 +49,13 @@
       </div>
 
     </div>
-  </nav>
+  </nav> -->
   <div style="float:right">
-    <form align="right" name="form1" method="post" action="{{url_for('user.logout')}}">
+    <!-- <form align="right" name="form1" method="post" action="{{url_for('user.logout')}}">
       <label class="logoutLblPos">
         <input name="Logout" type="submit" style="margin-left: 5px;" class=" btn btn-info " id="Logout" value="Logout">
       </label>
-    </form>
+    </form> -->
   </div>
   <div class="container">
 
@@ -505,6 +528,12 @@
           ShopOrders = [];
           function updateShopOrderTable() {
             var table = '', filter = document.getElementById("shop-order-status").value;
+
+            ShopOrders.sort(function(a, b) {
+                return b.unique_number - a.unique_number;
+            });
+
+
             $.each(ShopOrders, function (i, order) {
               if (filter != 'All' && order.Status != filter) { return; }
               table += '<tr><th scope="row">' + order.unique_number + '</th>';

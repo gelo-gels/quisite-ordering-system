@@ -303,3 +303,18 @@ input, textarea {
   visibility: hidden;
   position: absolute
 }
+
+
+
+@media (max-width: 641px) {
+  .navbar_home {
+    background: #800000;
+    padding: 20px 30px;
+  }
+}
+
+.modal {
+  overflow-x: hidden !important;
+  overflow-y: scroll !important;
+  -webkit-overflow-scrolling: touch;
+}
