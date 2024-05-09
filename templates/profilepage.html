@@ -1,0 +1,743 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Quisite - Profile</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="A ordering system By 12 - Einstein" />
+	<meta name="keywords" content="A ordering system By 12 - Einstein" />
+	<meta name="author" content="" />
+
+	
+
+	<!-- Facebook and Twitter integration -->
+	<meta property="og:title" content="" />
+	<meta property="og:image" content="" />
+	<meta property="og:url" content="" />
+	<meta property="og:site_name" content="" />
+	<meta property="og:description" content="" />
+	<meta name="twitter:title" content="" />
+	<meta name="twitter:image" content="" />
+	<meta name="twitter:url" content="" />
+	<meta name="twitter:card" content="" />
+
+	<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+	<link rel="shortcut icon" href="favicon.ico">
+
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,300' rel='stylesheet' type='text/css'>
+
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/animate.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+
+	<!-- Modernizr JS -->
+	<script src="{{ url_for('static', filename='js/modernizr-2.6.2.min.js') }}"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+  <!-- Nav -->
+	<div class="navbar_home">
+    <div class="row">
+        <div class="col-md-6">
+            <a href="homepage.html" class="poppins-medium branding__title btn__standard" >
+                QUISITE
+            </a>
+        </div>
+        <div class="col-md-6" style="text-align: right">
+            <div class="nav-tabs" style="border: 0 !important">
+              <a href="/productlistpage.html" class="btn__standard" style="margin-right: 10px">
+                <img src="{{ url_for('main.get_home_image') }}" style="width: 20px" />
+            </a>
+                <a href="/userpage.html" class="btn__standard" style="margin-right: 10px">
+                    <img src="{{ url_for('main.get_search_image') }}" style="width: 20px" />
+                </a>
+                <a href="/profilepage.html" class="btn__standard">
+                    <img src="{{ url_for('main.get_user_image') }}" style="width: 20px" />
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+    
+      
+
+  <div class="">
+    <div class="tab-content">
+      
+
+      <!-- Profile -->
+
+      <div id="Profile" class="tab-pane fade in active">
+        <div class="bg__profile">
+          <div class="bg-frntpage poppins-medium">
+
+              <div class="poppins-extrabold title__header">HELLO THERE FRIENDS!</div>
+
+            <div class="row" style="padding: 20px 0px">
+              <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 ">
+
+                <div class="profile__info">
+                    <div style="margin-bottom: 10px;">
+                      Username:
+                        <div>
+                            <input placeholder="{{user_info['U_account']}}" disabled style="padding: 10px 15px; border-radius: 10px; background-color: #fff;" />
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                      Name: 
+                      <div>
+                        <input placeholder="{{user_info['U_name']}}" disabled style="padding: 10px 15px; border-radius: 10px; background-color: #fff; text-transform: capitalize;" />
+                      </div>
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                      Phone Number: 
+                      <div>
+                        <input placeholder="{{user_info['U_phone']}}" disabled style="padding: 10px 15px; border-radius: 10px; background-color: #fff;" />
+                      </div>
+                    </div>
+                    
+                    <div style="text-align: center;">
+                        <div class="nav-tabs">
+                            <a style="display: block; margin-bottom: 10px;" class="btns" href="#MyOrder" onclick="searchMyOrders()">MY ORDERS</a>
+                        </div>
+        
+                    
+          
+                      <form align="left" name="form1" method="post" action="{{url_for('user.logout')}}">
+                          <input name="Logout" type="submit" class="btns btn btn-info " id="Logout" value="LOGOUT">
+                      </form>
+                    </div>
+                </div>
+
+
+              </div>
+              <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="wallet__balance">
+                    <div class="poppins-extrabold" style="font-size: 60px;">
+                    ₱ {{user_info['U_balance']}}
+                    </div>
+                    <div class="balance__">
+                        AVAILABLE BALANCE
+                    </div>
+                </div>
+
+                <div class="wallet__balance" style="margin-top: 10px;">
+                    To top up your load, please contact the canteen admin to add the amount, and send it via GCash to 09123456789. Once confirmed, your load will appear here.
+                </div>
+              </div>
+
+              <div class="col-xs-12 col-sm-12 col-md-4 col-lg-3 rm__mobile">
+                <div class="img__positioning">
+                  <img src="{{ url_for('main.get_logo_image') }}" class="img__sizing" />
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- MyOrder -->
+      <div id="MyOrder" class="tab-pane fade poppins-medium myorder__containerOuter">
+        <div class="myorder__container" style="margin: 0 auto;">
+        <h3>My Orders</h3>
+        <!-- HOW-TO: Filter table rows based on selected value
+          https://stackoverflow.com/questions/41554154/filter-table-rows-based-on-select-value -->
+        <select class="form-control" name="Status" id="order-status" style="width:150px; "
+          onchange="updateMyOrderTable()">
+          <option>All</option>
+          <option>Finished</option>
+          <option>Not finished</option>
+          <option>Canceled</option>
+        </select>
+          <div class="row">
+            <div class="col-xs-12" id="MyOrder-table">
+              <table class="table" style="margin-top: 15px;">
+                <!-- <thead>
+                  <tr>
+                    <th scope="col">Order ID</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Start Time</th>
+                    <th scope="col">End Time</th>
+                    <th scope="col">Shop Name</th>
+                    <th scope="col">Total Price</th>
+                    <th scope="col">Order Details</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead> -->
+                <!-- <tbody id="MyOrder-update">
+                  <tr>
+                    <th scope="row">1</th>
+                    <td>
+                      tmp2
+                    </td>
+                    <td>
+                      tmp3
+                    </td>
+                    <td>
+                      tmp4
+                    </td>
+                    <td>
+                      tmp5
+                    </td>
+                    <td>
+                      tmp6
+                    </td>
+                    <td>
+                      <button type="button" data-toggle="modal" data-target="#MyOrderDetail-1" class="btn btn-info ">Order
+                        Details</button>
+                    </td>
+                    <td>
+                      <button type="button" data-toggle="modal" data-target="test" name="test" class="btn btn-danger "
+                        onclick="none">Cancel Order</button>
+                    </td>
+                  </tr>
+                </tbody> -->
+              </table>
+
+              <div id="MyOrder-update">
+
+              </div>
+              <!-- <div>
+                <button type="button" name="empty" class="btn btn-danger " onclick="batchDeleteMyOrder()">Cancel Seleted
+                  Orders</button>
+              </div> -->
+              <!-- for loop2 should start here -->
+              <!-- Modal: MyOrderDetail-{id} -->
+              <div class="modal fade" id="MyOrderDetail-1" data-backdrop="static" tabindex="-1" role="dialog"
+                aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">Order Details</h4>
+                    </div>
+                    <div class="modal-body">
+                      <table class="table">
+                        <thread>
+                          <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Picture</th>
+                            <th scope="col">Meal name</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Quantity</th>
+                          </tr>
+                        </thread>
+                        <tbody id="MyOrderDetail-T-1">
+                          <tr>
+                            <th scope="row">1</th>
+                            <td>tmp11</td>
+                            <td>tmp12</td>
+                            <td>tmp13</td>
+                            <td>tmp14</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">2</th>
+                            <td>tmp21</td>
+                            <td>tmp22</td>
+                            <td>tmp23</td>
+                            <td>tmp24</td>
+                          </tr>
+                        </tbody>
+
+
+
+                      </table>
+
+                      
+                      <!-- <div id="MyOrderDetail-T-1">
+
+                      </div> -->
+                      <!-- EX: row['subtotal'] -->
+                      <!-- <p class="text-right">Subtotal $199</p>
+                      <p class="text-right"><small><em>Delivery fee $19</em></small></p>
+                      <p class="text-right">Total Price $218</p> -->
+                      <div class="modal-footer">
+                        <!-- <p class="text-right" id="Delivery_fee"></p> -->
+                        <p class="text-right" id="Total_price"></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- for loop2 should end here -->
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript">
+          var UID = -1;
+          // get user location
+          $(document).ready(function () {
+            $.ajax({
+              url: 'http://' + window.location.host + '/get_session',
+              type: 'GET',
+              dataType: 'json',
+              success: function (result) {
+                UID = result.user_info['UID']
+              },
+              error: function (xhr, status, error) {
+                var err = eval("(" + xhr.responseText + ")");
+                alert(err.Message + '\n' + 'http://' + window.location.host + '/get_session');
+              }
+            });
+          })
+          function deleteOrder(oid) {
+            // implement your order delete function
+            // !!! careful, use parseInt(OID) here since OID is str
+            OID = parseInt(oid);
+            $.ajax({
+              url: 'http://' + window.location.host + '/order-delete',
+              type: 'POST',
+              data: { 'OID': OID, 'is_shopowner': false },
+              dataType: 'json',
+              success: function (result) {
+                alert(result.msg);
+              },
+              error: function (jqxhr, textStatus, errorThrown) {
+                alert(jqxhr.responseText)
+              }
+            })
+            // and refresh order table
+            searchMyOrders()
+          }
+          function updateOrderDetail(OID) {
+            $.ajax({
+              url: 'http://' + window.location.host + "/order-detail",
+              method: "POST",
+              data: { 'OID': parseInt(OID), 'UID': parseInt(UID) },
+              async: false,
+              success: function (Order_info) {
+                body = ""
+                var Products = Order_info.Products
+                for (let i = 0; i < Products.length; i++) {
+                  p = Products[i]
+                  body += "<tr>"
+                  body += `<th scope="row">${i + 1}</th>`
+                  body += `<td><img src="data:image/${p.P_imagetype};base64, ${atob(p.P_image)}" style="width: 72px; height: 72px;"></td>
+                            <td>${p.P_name}</td>
+                            <td>${p.P_price}</td>
+                            <td>${p.Order_quantity}</td>`
+                  body += "</tr>"
+                }
+                $('#MyOrderDetail-1 #MyOrderDetail-T-1').html(body);
+                $('#MyOrderDetail-1 #Subtotal').html(`Subtotal $${Order_info.Subtotal}`)
+                // $('#MyOrderDetail-1 #Delivery_fee').html(`<small><em>Delivery fee $${Order_info.Delivery_fee}</small></em>`)
+                $('#MyOrderDetail-1 #Total_price').html(`Total Price ₱${Order_info.Subtotal}`)
+              },
+              error: function (jqxhr, textStatus, errorThrown) {
+                alert(jqxhr.responseText)
+              }
+            })
+          }
+          // Function to format the start_time string
+          function formatStartTime(startTime) {
+            // Attempt to create a Date object from the startTime string
+            var formattedDate = new Date(startTime);
+
+            // Check if the Date object is valid
+            if (isNaN(formattedDate.getTime())) {
+                return "Invalid Date"; // Return a default value if the date is invalid
+            }
+
+            // Format options
+            var options = {
+                weekday: 'short', // Abbreviated weekday name (e.g., 'Fri')
+                month: 'short', // Abbreviated month name (e.g., 'Apr')
+                day: '2-digit', // Day of the month, 2 digits (e.g., '19')
+                hour: 'numeric', // Hour (e.g., '9')
+                minute: '2-digit', // Minute (e.g., '28')
+                hour12: true // Use 12-hour clock (e.g., 'PM')
+            };
+
+            // Format the date using options
+            return formattedDate.toLocaleString('en-US', options);
+          }
+
+        function formatEndTime(endTime) {
+            // Attempt to create a Date object from the endTime string
+            var formattedDate = new Date(endTime);
+
+            // Check if the Date object is valid
+            if (isNaN(formattedDate.getTime())) {
+                return "Invalid Date"; // Return a default value if the date is invalid
+            }
+
+            // Format options
+            var options = {
+                weekday: 'short', // Abbreviated weekday name (e.g., 'Fri')
+                month: 'short', // Abbreviated month name (e.g., 'Apr')
+                day: '2-digit', // Day of the month, 2 digits (e.g., '19')
+                hour: 'numeric', // Hour (e.g., '9')
+                minute: '2-digit', // Minute (e.g., '28')
+                hour12: true // Use 12-hour clock (e.g., 'PM')
+            };
+
+            // Format the date using options
+            return formattedDate.toLocaleString('en-US', options);
+          }
+
+          function batchDeleteMyOrder() {
+            all_succ = true;
+            has_select = false;
+            $('#MyOrder-table').find('input:checked').each(function () {
+              has_select = true;
+              OID = parseInt($(this).attr('name'))
+              $.ajax({
+                url: 'http://' + window.location.host + '/order-delete',
+                type: 'POST',
+                async: false,
+                data: { 'OID': OID, 'is_shopowner': false },
+                dataType: 'json',
+                success: function (result) {
+                  console.log(result.msg);
+                },
+                error: function (jqxhr, textStatus, errorThrown) {
+                  all_succ = false;
+                  alert(jqxhr.responseText);
+                }
+              })
+            });
+            console.log(all_succ);
+            if (all_succ && has_select) {
+              alert('Seleted orders canceled successfully');
+            }
+            searchMyOrders()
+          }
+          MyOrders = []
+          function updateMyOrderTable() {
+            var div = '', 
+            filter = document.getElementById("order-status").value;
+
+            // Sort MyOrders array by unique_number in descending order
+            MyOrders.sort(function(a, b) {
+                return b.unique_number - a.unique_number;
+            });
+
+            
+
+
+
+            $.each(MyOrders, function (i, order) {
+                // Format the start_time string using formatStartTime function
+                var formattedStartTime = formatStartTime(order.start_time);
+                // Format the start_time string using formatEndTime function
+                var formattedEndTime = formatEndTime(order.end_time);
+
+
+                var co_opImagePath = "https://cdn.shopify.com/s/files/1/0810/4768/3383/files/received_1105445330748997.jpg?v=1715222213";
+
+                var canteenImagePath = "https://cdn.shopify.com/s/files/1/0810/4768/3383/files/received_1116269382976325.jpg?v=1715222213";
+
+                // if (order.S_name === "Gelo's Sari-Sari Store") {
+                //     imagePath = co_opImagePath;
+                // } else if (order.S_name === "arwind sari sari store") {
+                //     imagePath = canteenImagePath;
+                // } else {
+                //     // Handle other cases if needed
+                // }
+
+              // if (filter != 'All' && order.Status != filter) { return; }
+              // table += '<tr><th scope="row">' + order.unique_number + '</th>';
+              // table += '<td>' + order.Status + '</td>';
+              // table += '<td>' + order.start_time + '</td>';
+              // table += '<td>' + order.end_time + '</td>';
+              // table += '<td>' + order.S_name + '</td>';
+              // table += '<td>' + order.total_price + '</td>';
+              // if (order.Status == 'Not finished') {
+              //   not_fin = `
+              //   <td>
+              //     <button type="button" name="${order.OID}" data-toggle="modal" data-target="test" name="test" class="btn btn-danger "
+              //       onclick="deleteOrder(this.name)">Cancel Order</button>
+              //   </td>
+              //   `
+              // } else {
+              //   not_fin = `<td></td><td></td>`
+              // }
+              // table += `
+              //   <td>
+              //     <button type="button" name="${order.OID}" data-toggle="modal" data-target="#MyOrderDetail-1" class="btn btn-info " 
+              //     onclick="updateOrderDetail(this.name)"> Order Details</button>
+              //   </td>
+              //   ${not_fin}</tr>`;
+
+              if (filter != 'All' && order.Status != filter) { return; }
+              div += '<div style="padding: 16px; background: white; border-radius: 10px; margin: 10px 0px">';
+              
+                div += '<div style="display: grid;gap: 0;grid-template-columns: 80px auto auto">';
+
+                div += '<div>';
+                  // img here
+                  if (order.S_name === "Gelo's Sari-Sari Store") {
+                    div += `<img src="${co_opImagePath}" style="width: 100%; object-fit: cover; border-radius: 10px">`
+                  }
+                  if (order.S_name === "arwind sari sari store") {
+                    div += `<img src="${canteenImagePath}" style="width: 100%; object-fit: cover; border-radius: 10px">`
+                  }
+                  div += '</div>';
+
+                div += '<div style="margin: 0px 10px">'
+                  div += '<div class="poppins-extrabold" style="color: #333">' + order.S_name + '</div>';
+                  div += '<div style="font-size: 13px">Ordered on ' + formattedStartTime + '</div>';
+                  if (order.end_time != "") {
+                    div += '<div style="font-size: 13px">Picked up on ' + formattedEndTime + '</div>';
+                  } 
+                  div += '<div scope="row" style=" font-size: 13px">Order <span style="color: #333;" class="poppins-extrabold">#' + order.unique_number + '</span></div>';
+                  div += '<div style=" font-size: 13px">' + order.Status + '</div>';
+                div += '</div>'
+                
+
+                div += '<div>'
+                  div += '<div class="poppins-bold" style="text-align: right; font-size: 18px; color: #333">₱' + order.total_price + '</div>';
+                div += '</div>' 
+
+                
+                div += '<div>'
+                div += '</div>'
+                div += '<div>'
+                div += '</div>'
+
+
+                  div += '<div class="desktop__btnsOrder">'
+                  if (order.Status == 'Not finished') {
+                    not_fin = `
+                      <button type="button" name="${order.OID}" data-toggle="modal" data-target="test" name="test" class="btn" style="background: #800000; color: white;"
+                        onclick="deleteOrder(this.name)">Cancel Order</button>
+                    `
+                  } else {
+                    not_fin = `<div></div><div></div>`
+                  }
+                  div += `
+                      <button type="button" name="${order.OID}" data-toggle="modal" data-target="#MyOrderDetail-1" class="btn btn-info" style="margin-right: 5px" 
+                      onclick="updateOrderDetail(this.name)"> Order Details</button>
+                    ${not_fin}`;
+                  div += '</div>'
+ 
+              
+              div += '</div>'
+
+              div += '<div class="mobile__btnsOrder">'
+                  if (order.Status == 'Not finished') {
+                    not_fin = `
+                      <button type="button" name="${order.OID}" data-toggle="modal" data-target="test" name="test" class="btn" style="background: #800000; color: white;"
+                        onclick="deleteOrder(this.name)">Cancel Order</button>
+                    `
+                  } else {
+                    not_fin = `<div></div><div></div>`
+                  }
+                  div += `
+                      <button type="button" name="${order.OID}" data-toggle="modal" data-target="#MyOrderDetail-1" class="btn btn-info" style="margin-right: 5px" 
+                      onclick="updateOrderDetail(this.name)"> Order Details</button>
+                    ${not_fin}`;
+                  div += '</div>'
+
+              div += '</div>'
+
+                
+            });
+            $("#MyOrder-update").html(div);
+          }
+          function searchMyOrders() {
+            $.ajax({
+              url: 'http://' + window.location.host + "/search-MyOrders",
+              method: "POST",
+              data: { 'UID': UID },
+              async: false,
+              success: function (data) {
+                MyOrders = data.tableRow;
+                updateMyOrderTable();
+              },
+              error: function (jqxhr, textStatus, errorThrown) {
+                alert("error: " + textStatus)
+              }
+            })
+          }
+        </script>
+        </div>
+      </div>
+
+
+
+    </div>
+  </div>
+
+  <!-- Option 1: Bootstrap Bundle with Popper -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script> -->
+  <script>
+    $(document).ready(function () {
+      $(".nav-tabs a").click(function () {
+        $(this).tab('show');
+      });
+    });
+  </script>
+
+  <!-- Option 2: Separate Popper and Bootstrap JS -->
+  <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+    -->
+</body>
+
+</html>
+
+<style>
+.bg-frntpage {
+    background-image: url('https://cdn.shopify.com/s/files/1/0810/4768/3383/files/profile_material.png?v=1715223517');
+    background-position: bottom;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+    padding: 50px 100px;
+    color: black;
+}
+.bg__profile {
+  width: 100%;
+  background: linear-gradient(#9B9B9B 50%, #800000);
+}
+.balance__ {
+    background-color: #800000;
+    color: white;
+    padding: 10px;
+    width: 250px;
+    text-align: center;
+}
+.btns {
+    background-color: #800000;
+    color: white;
+    padding: 10px;
+    width: 230px;
+    text-align: center;
+    border-radius: 10px;
+    border: 0 !important;
+    font-size: 14px;
+}
+.btns:hover {
+    background-color: #800000;
+    color: white;
+    text-transform: none;
+}
+.nav-tabs {
+    border-bottom: 0px solid #ddd !important;
+}
+.profile__info {
+    padding: 20px;
+    /* text-align: center; */
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    width: 270px;
+}
+.wallet__balance {
+    padding: 20px;
+    /* text-align: center; */
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    width: 290px;
+}
+.img__sizing {
+  width: 450px
+}
+.title__header {
+  font-size: 60px;
+}
+
+
+@media (max-width: 1301px) {
+  .bg-frntpage {
+    background: linear-gradient(#9B9B9B 50%, #800000);
+    height: 100vh;
+    padding: 10px 30px;
+    
+  }
+  .img__sizing {
+    width: 100%
+  }
+}
+@media (max-width: 991px) {
+  .profile__info {
+    margin: 0 auto;
+  }
+  .wallet__balance {
+    margin: 0 auto;
+  }
+  .img__sizing {
+      width: 450px;
+      margin: 0 auto;
+  }
+  .img__positioning {
+    display: flex;
+  }
+  .title__header {
+    font-size: 40px;
+    text-align: center;
+  }
+}
+@media (max-width: 767px) {
+  .profile__info {
+    margin: 10px auto;
+  }
+  .rm__mobile {
+    display: none;
+  }
+}
+
+
+.myorder__container {
+  width: 700px;
+}
+@media (max-width: 809px) {
+  .myorder__container {
+    width: 100%;
+  }
+}
+
+.myorder__containerOuter {
+  padding: 50px;
+}
+@media (max-width: 653px) {
+  .myorder__containerOuter {
+    padding: 10px;
+  }
+}
+
+.desktop__btnsOrder {
+  display: flex; 
+  justify-content: end;
+}
+
+.mobile__btnsOrder {
+  display: flex; 
+  justify-content: center;
+  margin-top: 20px;
+}
+
+@media (max-width: 505px) {
+  .desktop__btnsOrder {
+    display: none;
+  }
+}
+@media (min-width: 505px) {
+  .mobile__btnsOrder {
+    display: none;
+  }
+}
+
+</style>

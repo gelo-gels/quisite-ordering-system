@@ -30,6 +30,11 @@ def homepage():
     return render_template('homepage.html')
 
 # Route to serve image file
+@main.route('/home')
+def get_home_image():
+    filename = '../templates/assets/home.png'  # Path to your image file
+    return send_file(filename, mimetype='image/png')
+
 @main.route('/search')
 def get_search_image():
     filename = '../templates/assets/search.png' # Path to your image file
@@ -75,6 +80,11 @@ def get_tomi_image():
 def get_valuemeal_image():
     filename = '../templates/assets/valuemeal.jpg'  # Path to your image file
     return send_file(filename, mimetype='image/jpg')
+
+@main.route('/profilematerial')
+def get_profilematerial_image():
+    filename = '../templates/assets/profile_material.png'  # Path to your image file
+    return send_file(filename, mimetype='image/png')
 
 
 
@@ -181,6 +191,39 @@ def productlistpage():
     image_info = [tple['P_image'].decode("utf-8") for tple in product_info]
 
     return render_template("productlistpage.html", user_info=user_info, shop_info=shop_info, product_info=product_info, image_info=image_info)
+
+
+@main.route("/profilepage.html")
+@login_required
+def profilepage():
+    # update session info every time
+    user_info = session.get('user_info')
+    UID = user_info['UID']
+    db = get_db()
+    user_info = db.cursor().execute(
+        """ select *
+            from Users
+            where UID = ?""", (UID,)
+    ).fetchone()
+    session['user_info'] = dict(user_info)
+
+    # fetch shop_info
+    shop_info = db.cursor().execute(
+        """ select *
+            from Stores
+            where S_owner = ?""", (UID,)
+    ).fetchone()
+
+    # fetch product_info
+    product_info = db.cursor().execute(
+        """ select *
+            from Products
+            where P_owner = ?""", (2,)
+    ).fetchall()
+
+    image_info = [tple['P_image'].decode("utf-8") for tple in product_info]
+
+    return render_template("profilepage.html", user_info=user_info, shop_info=shop_info, product_info=product_info, image_info=image_info)
 
 
 @main.route("/sign-up.html")

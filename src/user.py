@@ -9,6 +9,7 @@ from flask import (
     session, redirect, url_for,
     json, jsonify, flash
 )
+from datetime import datetime
 
 costumer = Blueprint('costumer', __name__)
 
@@ -396,7 +397,7 @@ def search_MyOrders():
     for unique_number, Status, start_time, end_time, S_name, OID, O_amount in rst:
         append({'unique_number': unique_number, 'Status': Status, 'start_time': start_time, 'end_time': end_time, 'S_name': S_name,
                 'OID': OID, 'total_price': O_amount})
-    print("Table:", table['tableRow'])
+    # print("Table:", table['tableRow'])
     response = jsonify(table)
     response.headers.add('Access-Control-Allow-Origin', '*')
     response.status_code = 200

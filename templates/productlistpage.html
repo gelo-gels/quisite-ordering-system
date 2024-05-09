@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Quisite</title>
+	<title>Quisite - Home</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="A ordering system By 12 - Einstein" />
 	<meta name="keywords" content="A ordering system By 12 - Einstein" />
@@ -38,7 +38,11 @@
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <title>Hello, world!</title>
+
+  <!-- Sweetalert -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 
 <body>
@@ -53,66 +57,88 @@
         </div>
         <div class="col-md-6" style="text-align: right">
             <div class="nav-tabs" style="border: 0 !important">
-              <a href="/productlistpage.html">Home</a>
+              <a href="/productlistpage.html" class="btn__standard" style="margin-right: 10px">
+                <img src="{{ url_for('main.get_home_image') }}" style="width: 20px" />
+            </a>
                 <a href="/userpage.html" class="btn__standard" style="margin-right: 10px">
                     <img src="{{ url_for('main.get_search_image') }}" style="width: 20px" />
                 </a>
-                <a href="/userpage.html#Profile" class="btn__standard">
+                <a href="/profilepage.html" class="btn__standard">
                     <img src="{{ url_for('main.get_user_image') }}" style="width: 20px" />
                 </a>
             </div>
         </div>
     </div>
 </div>
+
     
-      
+<div style="background-image: radial-gradient(#ffffff, #FD5F5F); height: 100vh;">
 
   <div class="container">
     <div class="tab-content">
       <div id="Home" class="tab-pane fade in active">
-        <h3>Home</h3>
+        <!-- <h3>Home</h3> -->
         
         <div class=" row col-xs-8">
-          <form class="form-horizontal hdtm" action="/action_page.php" method="post" id="search_form">
-            
 
+
+          <!-- DO NOT REMOVE -->
+          <form class="form-horizontal hdtm" action="/action_page.php" method="post" id="search_form">
             <div class="form-group">
                 <label class="control-label col-sm-1" for="Meal">Meal</label>
               <div class="col-sm-5">
                 <input type="text" class="form-control" name="meal" placeholder="Enter Meal">
               </div>
             </div>
-
-
             <div class="form-group">
                 <button type="submit" style="margin-left: 18px;" class="btn btn-primary">Search</button>
             </div>
           </form>
+
+
           <script type="text/javascript">
             var menu_data = {};
             function updateMealTable(shop) {
               // console.log(menu_data[shop.name])	
-              var n, table = '', menu = menu_data[shop.name];
+              var n, div = '', menu = menu_data[shop.name];
               $.each(menu, function (i, m) {
-                table += '<tr><th scope="row">' + (i + 1) + '</th>';
-                table += '<td><img src="data:image/' + m.P_imagetype + ';base64,' + atob(m.P_image) + '" style="width: 72px; height: 72px;"></td>';
-                // <img src="data:image/xxx;base64,xxxxxxxxxxxxx...">	
-                table += '<td>' + m.P_name + '</td>'
-                table += '<td>' + m.P_price + '</td>'
-                table += '<td>' + m.P_quantity + '</td>'
-                // quantity calculation	
-                // !!! format-string is using `` instead of ''
-                table += `<input type="hidden" name="PIDs" value="${m.PID}">`
-                table += `<td><input type="number" name="Quantities" min="0" value="0"></td></tr>`
+                div += 
+                  '<div>' +
+                    '<div style="background: #800000; color: white; border-radius: 10px; padding: 15px; margin: 10px">' +
+                      '<div>' +
+                        '<img src="data:image/' + m.P_imagetype + ';base64,' + atob(m.P_image) + '" style="width: 100px; height: 100px; object-fit: cover; border-radius: 10px">' + 
+                      '</div>' +
+
+                      '<div style="font-size: 20px; text-transform: capitalize">' + m.P_name + '</div>' +
+                      '<div style="font-size: 30px;" class="poppins-bold">' + '₱' + m.P_price + '</div>' +
+
+                      '<hr>' +
+
+                      '<div>' + 
+                        '<div>Qty:</div>' + '<div>' + m.P_quantity + '</div>' +
+                      '</div>' +
+
+                      '<hr>' +
+
+                      `<input type="hidden" name="PIDs" value="${m.PID}">` +
+                      `<div>` +
+                        `<div>Enter Quantity:</div>` +
+                        `<input class="input__order" type="number" name="Quantities" min="0" max="` + m.P_quantity + `" value="0">` +
+                      `</div>` +
+                    '</div>' +
+                    
+
+
+                  '</div>'               
               })
-              $("#menu-update").html(table);
+              $("#menu-update").html(div);
             }
-            var shop_1 = '<td><button type="button" data-toggle="modal" data-target="#menu" name="',
-              shop_2 = '_menu" class="btn btn-info " onclick="updateMealTable(this)">Open menu</button></td></tr>',
+            var shop_1 = '<div><button type="button" data-toggle="modal" data-target="#menu" name="', 
+                shop_2 = '_menu" class="btn btn__opnMenu" onclick="updateMealTable(this)">Open menu</button></div></tr>',
               // note that name is used for menu search (data is stored in menu_data)	
               shop_arr = [], index = 1;
             function updateShopTable(page_name) {
-              var n, table = '';
+              var n, div = '';
               if (shop_arr.length > 0) {
                 if (page_name == 'pre') {
                   if (index > 0) {
@@ -126,15 +152,27 @@
                   index = parseInt(page_name) - 1;
                 }
                 $.each(shop_arr[index], function (i, td) {
-                  table += '<tr><th scope="row">' + (i + 1) + '</th>';
-                  table += '<td>' + td.shop_name + '</td>';
-                  table += '<td>' + td.foodtype + '</td>';
-                //   table += '<td>' + td.distance + '</td>';
                   menu_data[td.shop_name + '_menu'] = td.menu
-                  table += shop_1 + td.shop_name + shop_2;
+                  // Alternate between the two image paths for each shop
+                  var imagePath = (i % 2 === 0) ? 'https://cdn.shopify.com/s/files/1/0810/4768/3383/files/received_1105445330748997.jpg?v=1715222213' : 'https://cdn.shopify.com/s/files/1/0810/4768/3383/files/received_1116269382976325.jpg?v=1715221227https://cdn.shopify.com/s/files/1/0810/4768/3383/files/received_1116269382976325.jpg?v=1715222213';
+
+                  // div += '<div>' + (i + 1) + '</div>';
+                  // div += '<div>' + td.shop_name + '</div>';
+
+                  div += 
+                          '<div class="container__img">' + 
+                            '<img class="canteen__img" src="' + imagePath + '" alt="Shop Image">' + 
+                              '<div class="centered poppins-medium">' + 
+                                '<div>' + td.shop_name + '</div>' +
+                                '<div>' + shop_1 + td.shop_name + shop_2 + '</div>' + 
+                              '</div>' + 
+                          '</div>';
+
+                  
+                  // div += shop_1 + td.shop_name + shop_2;
                 });
               }
-              $("#shop-update").html(table);
+              $("#shop-update").html(div);
             }
             var page_1 = '<li class="page-item"><a class="page-link" href="#" onclick="updateShopTable(this.name)" '
             function updatePage(max_pages) {
@@ -197,7 +235,7 @@
         </div>
 
         
-        <div class="row">
+        <!-- <div class="row">
           <div class="col-xs-8">
             <table class="table" style="margin-top: 15px;">
               <thead>
@@ -205,8 +243,6 @@
                   <th scope="col">#</th>
 
                   <th scope="col">shop name</th>
-                  <th scope="col">shop category</th>
-                  <!-- <th scope="col">Distance</th> -->
 
                 </tr>
               </thead>
@@ -214,6 +250,24 @@
 
               </tbody>
             </table>
+          </div>
+        </div> -->
+
+        <div class="row" style="margin-top: 150px;">
+          <div class="col-md-12">
+            <div class="canteen_data">
+              <div>
+                <p class="poppins-medium header__tltCanteen">
+                  Select Canteen
+                </p>
+              </div>
+
+
+              <div id="shop-update">
+
+              </div>
+
+            </div>
           </div>
         </div>
 
@@ -225,32 +279,89 @@
                 <!-- Modal content-->
                 <div class="modal-content">
                   <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">menu</h4>
+                    <button type="button" style="color: #fff !important" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" style="color: #fff !important">Menu</h4>
                   </div>
                   <form id="Order_Preview">
                     <div class="modal-body">
                       <!-- Order made -->
                       <div class="row">
-                        <div class="  col-xs-12">
-                          <table class="table" style=" margin-top: 15px;">
-                            <thead>
-                              <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Picture</th>
+                        <div class="col-md-6 col-sm-12 poppins-medium">
 
-                                <th scope="col">meal name</th>
 
-                                <th scope="col">price</th>
-                                <th scope="col">Quantity</th>
+                          <div>
+                            <img src="{{ url_for('main.get_logo_image') }}" style="width: 300px; margin: 0 auto;" />
+                          </div>
 
-                                <th scope="col">Order quantity</th>
-                              </tr>
-                            </thead>
-                            <tbody id="menu-update">
-                              <!-- To be added -->
-                            </tbody>
-                          </table>
+                          <div style="color: #000; font-size: 25px; margin: 50px 0px" class="poppins-bold">
+                            <p>CLICK AND CHOOSE OF ANY<br> FOOD YOU ARE CRAVING!</p>
+                          </div>
+                          
+                          <div class="row">
+                            <div class="col-sm-12 col-md-6" style="margin-top: 15px; margin-bottom: 15px;">
+                              <div style="background-color: #800000; color: #fff; width: 100%; border-radius: 10px; padding: 10px">
+
+                                <div class="poppins-bold" style="font-size: 23px;">
+                                  01
+                                </div>
+
+                                <div class="poppins-bold" style="font-size: 30px;">
+                                  ORDERING
+                                </div>
+
+                                <div style="font-size: 10px;">
+                                  CLICK ANY KIND OF FOODS SHOWN ON SCREEN. PAY ATTENTION TO THE QUANTITY AND SERVING TIME
+                                </div>
+
+                              </div>
+                            </div>
+
+                            <div class="col-sm-12 col-md-6" style="margin-top: 15px; margin-bottom: 15px;">
+                              <div style="background-color: #800000; color: #fff; width: 100%; border-radius: 10px; padding: 10px">
+
+                                <div class="poppins-bold" style="font-size: 23px;">
+                                  02
+                                </div>
+
+                                <div class="poppins-bold" style="font-size: 30px;">
+                                  PAYMENT
+                                </div>
+
+                                <div style="font-size: 10px;">
+                                  LOAD ANY AMOUNT OF MONEY (EXCEED YOUR LOAD AMOUNT TO THE PRICE OF FOOD) AND LET THE WEBSITE TRANSFORM IT TO CASH
+                                </div>
+
+                              </div>
+                            </div>
+
+                            <div class="col-sm-12 col-md-6" style="margin-top: 15px; margin-bottom: 15px;">
+                              <div style="background-color: #800000; color: #fff; width: 100%; border-radius: 10px; padding: 10px">
+
+                                <div class="poppins-bold" style="font-size: 30px;">
+                                  TAKE NOTE
+                                </div>
+
+                                <div style="font-size: 10px; text-transform: uppercase;">
+                                  Any food you order, is your responsibility to pick it up in Canteen
+                                </div>
+
+                              </div>
+                            </div>
+
+
+                          </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+
+                          <div class="table poppins-medium" style="width: 200px; margin: 0 auto;">
+                            <div>
+                              
+                            </div>
+
+                            <div id="menu-update">
+
+                            </div>
+                          </div>
                         </div>
 
                       </div>
@@ -258,12 +369,12 @@
                       <!-- Order button  -->
                     </div>
                     <div class="modal-footer">
-                      <label>Shipping Option:
+                      <label><span style="color: #fff">Shipping Option:</span>
                         <select class="form-control" name="PickUp" style="width: 150px;">
                           <option value="1">Pick-up</option>
                         </select>
                       </label>
-                      <button type="submit" name="Order_Preview" class="btn btn-default">Preview Order</button>
+                      <button type="submit" name="Order_Preview" class="btn btn-default buy__now">Proceed Checkout</button>
                     </div>
                   </form>
                 </div>
@@ -284,25 +395,104 @@
                         data: $(this).serialize(),
                         async: false,
                         success: function (Order_info) {
-                          body = ""
+                          div = ""
+                          console.log(Order_info.Products)
                           var Products = Order_info.Products
                           for (let i = 0; i < Products.length; i++) {
                             p = Products[i]
-                            body += "<tr>"
-                            body += `<th scope="row">${i + 1}</th>`
-                            body += `<td><img src="data:image/${p.P_imagetype};base64, ${atob(p.P_image)}" style="width: 72px; height: 72px;"></td>
-                                     <td>${p.P_name}</td>
-                                     <td>${p.P_price}</td>
-                                     <td>${p.Order_quantity}</td>`
-                            body += "</tr>"
+                            var imagePath;
+                            var store_name = ""
+                            var store_number = ""
+                            var store_socmed = ""
+
+                            // Co-op
+                            var co_opImagePath = "https://cdn.shopify.com/s/files/1/0810/4768/3383/files/received_1105445330748997.jpg?v=1715222213";
+                            var co_opStoreName = "Co-op"
+                            var co_opStoreNumber = "0991 412 3738"
+                            var co_opStoreSocMed = "Messenger: QHS Co-op Admin"
+
+                            // Canteen
+                            var canteenImagePath = "https://cdn.shopify.com/s/files/1/0810/4768/3383/files/received_1116269382976325.jpg?v=1715222213";
+                            var canteenStoreName = "Canteen"
+                            var canteenStoreNumber = "0967 214 7406"
+                            var canteenStoreSocMed = "Messenger: QHS Canteen Admin"
+
+                            if (p.P_owner === 1) {
+                                imagePath = co_opImagePath;
+                                store_name = co_opStoreName;
+                                store_number = co_opStoreNumber;
+                                store_socmed = co_opStoreSocMed;
+                            } else if (p.P_owner === 3) {
+                                imagePath = canteenImagePath;
+                                store_name = canteenStoreName;
+                                store_number = canteenStoreNumber;
+                                store_socmed = canteenStoreSocMed;
+                            } else {
+                                // Handle other cases if needed
+                            }
+                        div += 
+                         `<div class="col-md-4 col-sm-12 poppins-medium preventLoop">
+                            <div>
+                              <img src="${imagePath}" style="width: 200px; height: 200px; object-fit: cover; border-radius: 10px">
+                            </div>
+                            <div style="margin-top: 10px">
+                              <p style="color: white; font-size: 30px" class="poppins-bold">${store_name}</p>
+                            </div>
+
+                            <div style="text-align: left">
+                              <div>
+                                <p style="color: white; font-size: 17px">Shop Information:</p>
+                              </div>
+                              <div>
+                                <div class="poppins-bold" style="color: white; font-size: 17px">${store_number}</div>
+                                <div class="poppins-bold" style="color: white; font-size: 17px">${store_socmed}</div>
+                              </div>
+                              <br>
+                              <div>
+                                <p style="color: white; font-size: 17px">Serving Time:</p>
+                              </div>
+                              <div>
+                                <p class="poppins-bold" style="color: white; font-size: 17px">1-2 Minutes</p>
+                              </div>
+                            </div>
+                          </div>`
+
+
+
+
+                          div += '<div class="col-md-8 col-sm-12">'
+                            div += '<table class="table" style=" margin-top: 15px; color: white;">'
+                              div += `<thead>
+                                <tr>
+                                  <th scope="col" style="text-align: center;">QTY</th>
+                                  <th scope="col">Picture</th>
+
+                                  <th scope="col">Meal name</th>
+
+                                  <th scope="col" style="text-align: right;">Price</th>
+                                </tr>
+                              </thead>`
+
+                              div += '<tbody>'
+                              
+                                div += "<tr>" 
+                                div += `<td style="text-align: center; align-content: center;">${p.Order_quantity}</td>` +
+                                `<td style="text-align: left"><img src="data:image/${p.P_imagetype};base64, ${atob(p.P_image)}" style="width: 72px; height: 72px; object-fit: cover; border-radius: 10px"></td>
+                                <td style="text-align: left; text-transform: capitalize; align-content: center;">${p.P_name}</td>
+                                <td style="text-align: right; align-content: center;">${p.P_price}</td>`
+                                div += "</tr>"
+                              div += "</tbody>"
+                            div += "</table>"
+                          div += "</div>"
+
 
                             Home_Order_Info.PIDs.push(p.PID)
                             Home_Order_Info.Quantities.push(p.Order_quantity)
                           }
-                          $('#Order_Made #Order_Made_Menu').html(body);
+                          $('#Order_Made #Order_Made_Menu').html(div);
                           $('#Order_Made #Subtotal').html(`Subtotal $${Order_info.Subtotal}`)
                         //   $('#Order_Made #Delivery_fee').html(`<small><em>Delivery fee $${Order_info.Delivery_fee}</small></em>`)
-                          $('#Order_Made #Total_price').html(`Total Price ₱${Order_info.Subtotal}`)
+                          $('#Order_Made #Total_price').html(`₱${Order_info.Subtotal}`)
 
                           // global variable
                           Home_Order_Info.S_owner = Order_info.S_owner
@@ -313,8 +503,19 @@
                           $('#Order_Made').modal('show')
                         },
                         error: function (jqxhr, textStatus, errorThrown) {
-                          alert(jqxhr.responseText)
-                          location.reload(true);
+                          // alert(jqxhr.responseText)
+                          // location.reload(true);
+
+                            // Show success message using SweetAlert
+                            Swal.fire({
+                                position: "top-end",
+                                icon: "error",
+                                title: jqxhr.responseText,
+                                text: "",
+                                showConfirmButton: false,
+                                timer: 2500,
+                            });
+
                         }
                       })
                     });
@@ -330,31 +531,13 @@
                 <!-- Modal content-->
                 <div class="modal-content">
                   <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Order Preview</h4>
+                    <button type="button" style="color: #fff;" class="close" onclick="location.reload(true);">&times;</button>
+                    <h4 class="modal-title" style="color: #fff;">Check out</h4>
                   </div>
                   <form id="Order_Made_form">
                     <div class="modal-body">
                       <!-- Order made -->
-                      <div class="row">
-                        <div class="  col-xs-12">
-                          <table class="table" style=" margin-top: 15px;">
-                            <thead>
-                              <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Picture</th>
-
-                                <th scope="col">Meal name</th>
-
-                                <th scope="col">Price</th>
-                                <th scope="col">Order quantity</th>
-                              </tr>
-                            </thead>
-                            <tbody id="Order_Made_Menu">
-                              <!-- To be added -->
-                            </tbody>
-                          </table>
-                        </div>
+                      <div id="Order_Made_Menu" class="row">
 
                       </div>
 
@@ -364,8 +547,10 @@
                     <div class="modal-footer">
                       <!-- <p class="text-right" id="Subtotal"></p> -->
                       <!-- <p class="text-right" id="Delivery_fee"></p> -->
-                      <p class="text-right" id="Total_price"></p>
-                      <button type="submit" name="Order_Made" class="btn btn-default">Order</button>
+                        <span class="text-right poppins-bold" style="color: white; padding: 10px 60px; border: 1px solid #fff" id="Total_price"></span>
+                        <button type="submit" name="Order_Made" class="btn btn-default buy__now">BUY NOW</button>
+                      </div>
+
                     </div>
                   </form>
                 </div>
@@ -382,12 +567,46 @@
                         async: false,
                         success: function (data) {
                           console.log(data)
-                          alert(data.message);
-                          location.reload(true);
-                        },
+                          // alert(data.message);
+                          // location.reload(true);
+
+                          if (data.message === "Failed to create order: insufficient balance") {
+                            // Show success message using SweetAlert
+                            Swal.fire({
+                                position: "center",
+                                icon: "error",
+                                title: data.message,
+                                text: "Please Top-Up",
+                                showConfirmButton: true,
+                            });
+                        }
+                        else {
+                          Swal.fire({
+                            position: "center",
+                            icon: "success",
+                            title: data.message,
+                            text: "Please Proceed to My Orders for receipt",
+                            showDenyButton: true,
+                            confirmButtonText: "Go to Profile",
+                            denyButtonText: `Continue Shopping`,
+                            allowOutsideClick: false,
+
+                          }).then((result) => {
+                            if (result.isConfirmed) {
+                              window.location.assign("/profilepage.html")
+                            } else if (result.isDenied) {
+                              location.reload(true);
+                            }
+                          });
+                          
+                        }
+                      },
+                        
+
                         error: function (jqxhr, textStatus, errorThrown) {
                           alert(jqxhr.responseText)
                           location.reload(true);
+
                         }
                       })
                     });
@@ -398,6 +617,7 @@
         </div>
     </div>
   </div>
+</div>
 
   <!-- Option 1: Bootstrap Bundle with Popper -->
   <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script> -->
@@ -417,3 +637,117 @@
 </body>
 
 </html>
+
+<style>
+  .container {
+    text-align: center;
+  }
+  .canteen__img {
+    width: 300px;
+    height: 300px;
+    object-fit: cover;
+    margin: 10px;
+    border-radius: 10px;
+  }
+  .container__img {
+    position: relative;
+    color: white;
+    display: ruby;
+  }
+  .centered {
+    position: absolute;
+    top: -10px;
+    left: 0;
+    text-align: center;
+    padding: 0px 81px;
+    /* transform: translate(-50%, -50%); */
+  }
+  .btn__opnMenu {
+    background: #800000;
+    transition: 0.5s;
+  }
+  .btn__opnMenu:hover {
+    background: #700000;
+    color: white
+  }
+  .header__tltCanteen {
+    color: white; 
+    background: #800000; 
+    width: 300px; 
+    margin: 0 auto; 
+    border-radius: 10px;
+    padding: 10px
+  }
+  input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button {
+  opacity: 1;
+}
+
+input:focus {
+  border: 0 !important;
+}
+input:focus-visible {
+  outline: 0;
+}
+.input__order {
+  width: 100%;
+      text-align: center;
+      padding: 10px;
+      border-radius: 10px;
+      outline: 0;
+      border: 0;
+}
+.modal-content {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+@media (min-width: 800px) {
+    .modal-dialog {
+        width: 800px;
+        margin: 30px auto;
+    }
+}
+@media (min-width: 1000px) {
+    .modal-dialog {
+        width: 900px;
+        margin: 30px auto;
+    }
+}
+@media (min-width: 1200px) {
+    .modal-dialog {
+        width: 1200px;
+        margin: 30px auto;
+    }
+}
+
+
+
+.buy__now {
+  color: white;
+  background: #800;
+  outline: 0;
+  border: 0;
+  padding: 10px 30px;
+  margin-top: -2px;
+}
+
+.preventLoop:nth-child(n + 2) {
+  display: none;
+}
+
+
+@media (max-width: 688px) {
+  .container__img  {
+    display: block;
+  }
+  .centered {
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+  }
+}
+</style>

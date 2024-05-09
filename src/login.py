@@ -47,6 +47,10 @@ def login():
         # admin login
         session['user_info'] = dict(user_info)
         return redirect(url_for('main.adminpage'))
+    elif user_info['U_account'] == 'arwind':
+        # admin login
+        session['user_info'] = dict(user_info)
+        return redirect(url_for('main.adminpage'))
     else:
         # login successfully
         session['user_info'] = dict(user_info)
