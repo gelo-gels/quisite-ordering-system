@@ -33,7 +33,7 @@ def search_ShopOrders():
                 case
                     when O_status = 0 then 'Not finished'
                     when O_status = 1 then 'Finished'
-                    else 'Canceled'
+                    else 'Cancelled'
                 end as Status,
                 strftime('%Y/%m/%d %H:%M', O_start_time) as start_time, 
                 case
@@ -123,7 +123,7 @@ def order_delete():
     ).fetchone()[0]
     print("customer_ID: ", customer_ID, "shop_owner_ID: ", shop_owner_ID)
 
-    # get canceled order data from db
+    # get cancelled order data from db
     rst = db.cursor().execute("""
         select * 
         from Orders 
@@ -140,8 +140,8 @@ def order_delete():
                 'update Orders set O_status = -1 where OID = ?', (delete_OID, )
             )
         else:
-            return jsonify('Order is already finished / canceled'), 500
-        # update process order status to 'owner canceled' or 'user canceled'
+            return jsonify('Order is already finished / cancelled'), 500
+        # update process order status to 'owner cancelled' or 'user cancelled'
         if is_shopowner == 'true':
             print("Shopowner cancels order")
             db.cursor().execute(
@@ -246,7 +246,7 @@ def order_complete():
                 update Orders set O_status = 1, O_end_time = datetime('now', 'localtime') where OID = ?
                 ''', (complete_OID, ))
         else:
-            return jsonify('Order is already finished / canceled'), 500
+            return jsonify('Order is already finished / cancelled'), 500
 
         # update process order status to 'order completed'
         db.cursor().execute(

@@ -380,7 +380,7 @@ def search_MyOrders():
             case
                 when O_status = 0 then 'Not finished'
                 when O_status = 1 then 'Finished'
-                else 'Canceled'
+                else 'Cancelled'
             end as Status, 
             strftime('%Y/%m/%d %H:%M', O_start_time) as start_time, 
             case
