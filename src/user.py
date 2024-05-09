@@ -378,7 +378,7 @@ def search_MyOrders():
         select 
             O_unique_number,
             case
-                when O_status = 0 then 'Not finished'
+                when O_status = 0 then 'Pending'
                 when O_status = 1 then 'Finished'
                 else 'Cancelled'
             end as Status, 

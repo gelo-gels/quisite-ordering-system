@@ -159,7 +159,7 @@
           onchange="updateMyOrderTable()">
           <option>All</option>
           <option>Finished</option>
-          <option>Not finished</option>
+          <option>Pending</option>
           <option>Cancelled</option>
         </select>
           <div class="row">
@@ -455,7 +455,7 @@
               // table += '<td>' + order.end_time + '</td>';
               // table += '<td>' + order.S_name + '</td>';
               // table += '<td>' + order.total_price + '</td>';
-              // if (order.Status == 'Not finished') {
+              // if (order.Status == 'Pending') {
               //   not_fin = `
               //   <td>
               //     <button type="button" name="${order.OID}" data-toggle="modal" data-target="test" name="test" class="btn btn-danger "
@@ -510,7 +510,7 @@
 
 
                   div += '<div class="desktop__btnsOrder">'
-                  if (order.Status == 'Not finished') {
+                  if (order.Status == 'Pending') {
                     not_fin = `
                       <button type="button" name="${order.OID}" data-toggle="modal" data-target="test" name="test" class="btn" style="background: #800000; color: white;"
                         onclick="deleteOrder(this.name)">Cancel Order</button>
@@ -528,7 +528,7 @@
               div += '</div>'
 
               div += '<div class="mobile__btnsOrder">'
-                  if (order.Status == 'Not finished') {
+                  if (order.Status == 'Pending') {
                     not_fin = `
                       <button type="button" name="${order.OID}" data-toggle="modal" data-target="test" name="test" class="btn" style="background: #800000; color: white;"
                         onclick="deleteOrder(this.name)">Cancel Order</button>
