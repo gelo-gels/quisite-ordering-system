@@ -181,8 +181,18 @@
                   $.each(shop_arr[index], function (i, td) {
                     menu_data[td.shop_name + '_menu'] = td.menu
                     // Alternate between the two image paths for each shop
-                    var imagePath = (i % 2 === 0) ? 'https://cdn.shopify.com/s/files/1/0810/4768/3383/files/received_1105445330748997.jpg?v=1715222213' : 'https://cdn.shopify.com/s/files/1/0810/4768/3383/files/received_1116269382976325.jpg?v=1715221227';
+                    // var imagePath = (i % 2 === 0) ? 'https://cdn.shopify.com/s/files/1/0810/4768/3383/files/received_1116269382976325.jpg?v=1715222213' : 'https://cdn.shopify.com/s/files/1/0810/4768/3383/files/received_1105445330748997.jpg?v=1715222213';
+                    
+                    // var imagePath = (i === 0) ? 'https://cdn.shopify.com/s/files/1/0810/4768/3383/files/received_1116269382976325.jpg?v=1715222213' :
+                    // (i === 1) ? 'https://cdn.shopify.com/s/files/1/0810/4768/3383/files/received_1105445330748997.jpg?v=1715222213' :
+                    // '';
 
+                    var imagePath;
+                    if (td.shop_name === 'Canteen') {
+                        imagePath = 'https://cdn.shopify.com/s/files/1/0810/4768/3383/files/received_1116269382976325.jpg?v=1715222213';
+                    } else if (td.shop_name === 'Co-op') {
+                        imagePath = 'https://cdn.shopify.com/s/files/1/0810/4768/3383/files/received_1105445330748997.jpg?v=1715222213';
+                    }
                     // div += '<div>' + (i + 1) + '</div>';
                     // div += '<div>' + td.shop_name + '</div>';
   
@@ -451,15 +461,15 @@
                             var store_socmed = ""
 
                             // Co-op
-                            var co_opImagePath = "https://cdn.shopify.com/s/files/1/0810/4768/3383/files/received_1105445330748997.jpg?v=1715222213";
+                            var co_opImagePath = "https://cdn.shopify.com/s/files/1/0810/4768/3383/files/received_1105445330748997_1.jpg?v=1715357713";
                             var co_opStoreName = "Co-op"
-                            var co_opStoreNumber = "0991 412 3738"
+                            var co_opStoreNumber = "0997 293 6833"
                             var co_opStoreSocMed = "Messenger: QHS Co-op Admin"
 
                             // Canteen
-                            var canteenImagePath = "https://cdn.shopify.com/s/files/1/0810/4768/3383/files/received_1105445330748997.jpg?v=1715222213";
+                            var canteenImagePath = "https://cdn.shopify.com/s/files/1/0810/4768/3383/files/received_1116269382976325.jpg?v=1715221227";
                             var canteenStoreName = "Canteen"
-                            var canteenStoreNumber = "0967 214 7406"
+                            var canteenStoreNumber = "0966 006 3617"
                             var canteenStoreSocMed = "Messenger: QHS Canteen Admin"
 
                             if (p.P_owner === 1) {
@@ -467,7 +477,7 @@
                                 store_name = co_opStoreName;
                                 store_number = co_opStoreNumber;
                                 store_socmed = co_opStoreSocMed;
-                            } else if (p.P_owner === 3) {
+                            } else if (p.P_owner === 2) {
                                 imagePath = canteenImagePath;
                                 store_name = canteenStoreName;
                                 store_number = canteenStoreNumber;
@@ -707,7 +717,7 @@
     top: -10px;
     left: 0;
     text-align: center;
-    padding: 0px 81px;
+    padding: 0px 110px;
     /* transform: translate(-50%, -50%); */
   }
   .btn__opnMenu {

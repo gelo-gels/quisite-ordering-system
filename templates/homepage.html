@@ -73,8 +73,8 @@
     <!-- Content -->
     <div class="bg-frntpage">
         <div class="row">
-            <div class="col-sm-6 col-md-6 animate-box" data-animate-effect="fadeInLeft">
-                <div class="poppins-extrabold" style="font-size: 60px; color: #202020; line-height: 1; margin-bottom: 50px;" >
+            <div class="col-sm-12 col-md-6 animate-box" data-animate-effect="fadeInLeft">
+                <div class="poppins-extrabold hmpage__title">
                     PURCHASE WITHOUT HESITATION
                 </div>
                 <div style="width: 300px">
@@ -85,14 +85,14 @@
                   </div>
                   
                 </div>
-                <div style="width: 400px">
+                <div class="btn__mobile_size">
                   <div class="row">
-                      <div class="col-sm-6 col-md-6">
+                      <div class="col-xs-12 col-md-6" style="margin-bottom: 20px;">
                           <a href="sign-up.html" class="btn__standard btn-joinnow poppins-regular">
                               Join now
                           </a>
                       </div>
-                      <div class="col-md-6">
+                      <div class="col-xs-12 col-md-6">
                           <a href="index.html" class="btn__standard btn-login poppins-regular">
                             Log In
                           </a>
@@ -100,31 +100,30 @@
                   </div>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6 mobile__rmHomepage">
               <img src="{{ url_for('main.get_logo_image') }}" style="width: 450px" />
             </div>
         </div>
     </div>
-
     <div class="bg-scndpage">
       <div class="row animate-box" style="padding: 50px 100px" data-animate-effect="fadeInUp">
-        <div class="col-md-2">
-          <img src="{{ url_for('main.get_borger_image') }}" style="width: 200px; height: 200px; object-fit: cover; border-radius: 10px" />
+        <div class="col-xs-12 col-sm-4 col-md-2">
+          <img src="{{ url_for('main.get_borger_image') }}" class="product__img" />
         </div>
-        <div class="col-md-2">
-          <img src="{{ url_for('main.get_kakanin_image') }}" style="width: 200px; height: 200px; object-fit: cover; border-radius: 10px" />
+        <div class="col-xs-12 col-sm-4 col-md-2">
+          <img src="{{ url_for('main.get_kakanin_image') }}" class="product__img" />
         </div>
-        <div class="col-md-2">
-          <img src="{{ url_for('main.get_mangojuice_image') }}" style="width: 200px; height: 200px; object-fit: cover; border-radius: 10px" />
+        <div class="col-xs-12 col-sm-4 col-md-2">
+          <img src="{{ url_for('main.get_mangojuice_image') }}" class="product__img" />
         </div>
-        <div class="col-md-2">
-          <img src="{{ url_for('main.get_spag_image') }}" style="width: 200px; height: 200px; object-fit: cover; border-radius: 10px" />
+        <div class="col-xs-12 col-sm-4 col-md-2">
+          <img src="{{ url_for('main.get_spag_image') }}" class="product__img" />
         </div>
-        <div class="col-md-2">
-          <img src="{{ url_for('main.get_tomi_image') }}" style="width: 200px; height: 200px; object-fit: cover; border-radius: 10px" />
+        <div class="col-xs-12 col-sm-4 col-md-2">
+          <img src="{{ url_for('main.get_tomi_image') }}" class="product__img" />
         </div>
-        <div class="col-md-2">
-          <img src="{{ url_for('main.get_valuemeal_image') }}" style="width: 200px; height: 200px; object-fit: cover; border-radius: 10px" />
+        <div class="col-xs-12 col-sm-4 col-md-2">
+          <img src="{{ url_for('main.get_valuemeal_image') }}" class="product__img" />
         </div>
       </div>
     </div>
@@ -182,7 +181,48 @@
     font-size: 13px;
 }
 
+.hmpage__title {
+  font-size: 60px; 
+  color: #202020; 
+  line-height: 1; 
+  margin-bottom: 50px;
+}
+
+.product__img {
+  width: 100%; 
+  height: 100%; 
+  object-fit: cover; 
+  border-radius: 10px
+}
 .bg-scndpage {
   background: #800000;
+}
+.btn__mobile_size {
+  width: 400px;
+}
+
+@media (max-width: 991px) {
+  .mobile__rmHomepage {
+    display: none;
+  }
+  .product__img {
+    margin-bottom: 30px;
+  }
+  .btn__mobile_size {
+    width: 100%;
+  }
+}
+
+@media (max-width: 773px) {
+  .bg-frntpage {
+    padding: 50px 20px
+  }
+}
+
+@media (max-width: 481px) {
+  .hmpage__title {
+    font-size: 45px; 
+    margin-bottom: 40px;
+  }
 }
 </style>

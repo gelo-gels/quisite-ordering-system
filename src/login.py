@@ -43,11 +43,11 @@ def login():
         # login failed
         flash("Login failed, please try again")
         return redirect(url_for('main.index'))
-    elif user_info['U_account'] == 'cian':
+    elif user_info['U_account'] == 'admincoop':
         # admin login
         session['user_info'] = dict(user_info)
         return redirect(url_for('main.adminpage'))
-    elif user_info['U_account'] == 'arwind':
+    elif user_info['U_account'] == 'admincanteen':
         # admin login
         session['user_info'] = dict(user_info)
         return redirect(url_for('main.adminpage'))
