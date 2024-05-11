@@ -9,7 +9,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Minimal and Clean Sign up / Login and Forgot Form by FreeHTML5.co</title>
+	<title>Quisite - Sign Up</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="Free HTML5 Template by FreeHTML5.co" />
 	<meta name="keywords" content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive" />
@@ -110,17 +110,17 @@
 					{% block body %}{% endblock %}
 					<div class="form-group">
 						<label for="name" class="sr-only poppins-regular">Name</label>
-						<input type="text" class="form-control poppins-regular" id="name" name="name" placeholder="Name"
+						<input type="text" class="form-control poppins-regular" id="name" name="name" placeholder="Name ex: John Doe"
 							autocomplete="off">
 					</div>
 					<div class="form-group">
 						<label for="name" class="sr-only poppins-regular">phone number</label>
 						<input type="text" class="form-control poppins-regular" id="phonenumber" name="phonenumber"
-							placeholder="Phone Number" autocomplete="off">
-					</div>
+							placeholder="Phone num ex: 9123456789" autocomplete="off">
+					</div>				 
 					<div class="form-group">
 						<label for="Account" class="sr-only poppins-regular">User name</label>
-						<input type="text" class="form-control poppins-regular" id="Account" name="Account" placeholder="User Name"
+						<input type="text" class="form-control poppins-regular" id="Account" name="Account" placeholder="User Name ex: johndoe"
 							autocomplete="off">
 						<div id="msg"></div>
 					</div>
@@ -151,7 +151,7 @@
 				$('document').ready(function () {
 					$('#Account').on('input', function () {
 						$.ajax({
-							url: 'https://' + window.location.host + "/register-account-check",
+							url: 'http://' + window.location.host + "/register-account-check",
 							method: "POST",
 							data: $('#Account').serialize(),
 							async: false,

@@ -281,7 +281,7 @@
           // get user location
           $(document).ready(function () {
             $.ajax({
-              url: 'https://' + window.location.host + '/get_session',
+              url: 'http://' + window.location.host + '/get_session',
               type: 'GET',
               dataType: 'json',
               success: function (result) {
@@ -298,7 +298,7 @@
             // !!! careful, use parseInt(OID) here since OID is str
             OID = parseInt(oid);
             $.ajax({
-              url: 'https://' + window.location.host + '/order-delete',
+              url: 'http://' + window.location.host + '/order-delete',
               type: 'POST',
               data: { 'OID': OID, 'is_shopowner': false },
               dataType: 'json',
@@ -314,7 +314,7 @@
           }
           function updateOrderDetail(OID) {
             $.ajax({
-              url: 'https://' + window.location.host + "/order-detail",
+              url: 'http://' + window.location.host + "/order-detail",
               method: "POST",
               data: { 'OID': parseInt(OID), 'UID': parseInt(UID) },
               async: false,
@@ -395,7 +395,7 @@
               has_select = true;
               OID = parseInt($(this).attr('name'))
               $.ajax({
-                url: 'https://' + window.location.host + '/order-delete',
+                url: 'http://' + window.location.host + '/order-delete',
                 type: 'POST',
                 async: false,
                 data: { 'OID': OID, 'is_shopowner': false },
@@ -436,9 +436,9 @@
                 var formattedEndTime = formatEndTime(order.end_time);
 
 
-                var co_opImagePath = "https://cdn.shopify.com/s/files/1/0810/4768/3383/files/received_1105445330748997.jpg?v=1715222213";
+                var co_opImagePath = "https://cdn.shopify.com/s/files/1/0810/4768/3383/files/received_1105445330748997_1.jpg?v=1715357713";
 
-                var canteenImagePath = "https://cdn.shopify.com/s/files/1/0810/4768/3383/files/received_1116269382976325.jpg?v=1715222213";
+                var canteenImagePath = "https://cdn.shopify.com/s/files/1/0810/4768/3383/files/received_1116269382976325.jpg?v=1715221227";
 
                 // if (order.S_name === "Gelo's Sari-Sari Store") {
                 //     imagePath = co_opImagePath;
@@ -479,10 +479,10 @@
 
                 div += '<div>';
                   // img here
-                  if (order.S_name === "Gelo's Sari-Sari Store") {
+                  if (order.S_name === "Co-op") {
                     div += `<img src="${co_opImagePath}" style="width: 100%; object-fit: cover; border-radius: 10px">`
                   }
-                  if (order.S_name === "arwind sari sari store") {
+                  if (order.S_name === "Canteen") {
                     div += `<img src="${canteenImagePath}" style="width: 100%; object-fit: cover; border-radius: 10px">`
                   }
                   div += '</div>';
@@ -550,7 +550,7 @@
           }
           function searchMyOrders() {
             $.ajax({
-              url: 'https://' + window.location.host + "/search-MyOrders",
+              url: 'http://' + window.location.host + "/search-MyOrders",
               method: "POST",
               data: { 'UID': UID },
               async: false,

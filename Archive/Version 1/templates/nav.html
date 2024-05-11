@@ -186,7 +186,7 @@
             // get user location
             $(document).ready(function () {
               $.ajax({
-                url: 'https://' + window.location.host + '/get_session',
+                url: 'http://' + window.location.host + '/get_session',
                 type: 'GET',
                 dataType: 'json',
                 success: function (result) {
@@ -280,7 +280,7 @@
               input_value['ordering'] = hash_table[input_value['ordering']]
               input_value['desc'] = document.getElementById("desc").checked
               $.ajax({
-                url: 'https://' + window.location.host + "/search-shops",
+                url: 'http://' + window.location.host + "/search-shops",
                 method: method,
                 data: Object.assign({}, input_value, location),
                 async: false,
@@ -471,7 +471,7 @@
                 $('document').ready(function () {
                   $('#shop_name').on('input', function () {
                     $.ajax({
-                      url: 'https://' + window.location.host + "/register-shop_name-check",
+                      url: 'http://' + window.location.host + "/register-shop_name-check",
                       method: "POST",
                       data: $('#shop_name').serialize(),
                       async: false,

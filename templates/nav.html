@@ -189,7 +189,7 @@
             // get user location
             $(document).ready(function () {
               $.ajax({
-                url: 'https://' + window.location.host + '/get_session',
+                url: 'http://' + window.location.host + '/get_session',
                 type: 'GET',
                 dataType: 'json',
                 success: function (result) {
@@ -286,7 +286,7 @@
               input_value['ordering'] = hash_table[input_value['ordering']]
               input_value['desc'] = document.getElementById("desc").checked
               $.ajax({
-                url: 'https://' + window.location.host + "/search-shops",
+                url: 'http://' + window.location.host + "/search-shops",
                 method: method,
                 data: Object.assign({}, input_value, location),
                 async: false,
@@ -384,7 +384,7 @@
                     $('#Order_Preview').on('submit', function (event) {
                       event.preventDefault();
                       $.ajax({
-                        url: 'https://' + window.location.host + "/order_preview",
+                        url: 'http://' + window.location.host + "/order_preview",
                         method: "POST",
                         data: $(this).serialize(),
                         async: false,
@@ -480,7 +480,7 @@
                       console.log(JSON.stringify(Home_Order_Info))
                       event.preventDefault();
                       $.ajax({
-                        url: 'https://' + window.location.host + "/order_made",
+                        url: 'http://' + window.location.host + "/order_made",
                         method: "POST",
                         contentType: 'application/json',
                         data: JSON.stringify(Home_Order_Info),
@@ -584,7 +584,7 @@
                 $('document').ready(function () {
                   $('#shop_name').on('input', function () {
                     $.ajax({
-                      url: 'https://' + window.location.host + "/register-shop_name-check",
+                      url: 'http://' + window.location.host + "/register-shop_name-check",
                       method: "POST",
                       data: $('#shop_name').serialize(),
                       async: false,
@@ -855,7 +855,7 @@
           // get user location
           $(document).ready(function () {
             $.ajax({
-              url: 'https://' + window.location.host + '/get_session',
+              url: 'http://' + window.location.host + '/get_session',
               type: 'GET',
               dataType: 'json',
               success: function (result) {
@@ -872,7 +872,7 @@
             // !!! careful, use parseInt(OID) here since OID is str
             OID = parseInt(oid);
             $.ajax({
-              url: 'https://' + window.location.host + '/order-delete',
+              url: 'http://' + window.location.host + '/order-delete',
               type: 'POST',
               data: { 'OID': OID, 'is_shopowner': false },
               dataType: 'json',
@@ -888,7 +888,7 @@
           }
           function updateOrderDetail(OID) {
             $.ajax({
-              url: 'https://' + window.location.host + "/order-detail",
+              url: 'http://' + window.location.host + "/order-detail",
               method: "POST",
               data: { 'OID': parseInt(OID), 'UID': parseInt(UID) },
               async: false,
@@ -922,7 +922,7 @@
               has_select = true;
               OID = parseInt($(this).attr('name'))
               $.ajax({
-                url: 'https://' + window.location.host + '/order-delete',
+                url: 'http://' + window.location.host + '/order-delete',
                 type: 'POST',
                 async: false,
                 data: { 'OID': OID, 'is_shopowner': false },
@@ -977,7 +977,7 @@
           }
           function searchMyOrders() {
             $.ajax({
-              url: 'https://' + window.location.host + "/search-MyOrders",
+              url: 'http://' + window.location.host + "/search-MyOrders",
               method: "POST",
               data: { 'UID': UID },
               async: false,
@@ -1118,7 +1118,7 @@
             // !!! careful, use parseInt(OID) here since OID is str
             OID = parseInt(oid);
             $.ajax({
-              url: 'https://' + window.location.host + '/order-complete',
+              url: 'http://' + window.location.host + '/order-complete',
               type: 'POST',
               data: { 'OID': OID },
               dataType: 'json',
@@ -1137,7 +1137,7 @@
             // !!! careful, use parseInt(OID) here since OID is str
             OID = parseInt(oid);
             $.ajax({
-              url: 'https://' + window.location.host + '/order-delete',
+              url: 'http://' + window.location.host + '/order-delete',
               type: 'POST',
               data: { 'OID': OID, 'is_shopowner': true },
               dataType: 'json',
@@ -1153,7 +1153,7 @@
           }
           function updateShopOrderDetail(OID) {
             $.ajax({
-              url: 'https://' + window.location.host + "/order-detail",
+              url: 'http://' + window.location.host + "/order-detail",
               method: "POST",
               data: { 'OID': parseInt(OID), 'UID': parseInt(UID) },
               async: false,
@@ -1187,7 +1187,7 @@
               has_select = true;
               OID = parseInt($(this).attr('name'))
               $.ajax({
-                url: 'https://' + window.location.host + '/order-complete',
+                url: 'http://' + window.location.host + '/order-complete',
                 type: 'POST',
                 async: false,
                 data: { 'OID': OID },
@@ -1213,7 +1213,7 @@
               has_select = true;
               OID = parseInt($(this).attr('name'))
               $.ajax({
-                url: 'https://' + window.location.host + '/order-delete',
+                url: 'http://' + window.location.host + '/order-delete',
                 type: 'POST',
                 async: false,
                 data: { 'OID': OID, 'is_shopowner': true },
@@ -1267,7 +1267,7 @@
           }
           function searchShopOrders() {
             $.ajax({
-              url: 'https://' + window.location.host + "/search-ShopOrders",
+              url: 'http://' + window.location.host + "/search-ShopOrders",
               method: "POST",
               data: { 'UID': UID },
               async: false,
@@ -1344,7 +1344,7 @@
         }
         function searchTransactionRecord() {
           $.ajax({
-            url: 'https://' + window.location.host + "/search-transactionRecord",
+            url: 'http://' + window.location.host + "/search-transactionRecord",
             type: "POST",
             data: { 'UID': UID },
             async: false,
