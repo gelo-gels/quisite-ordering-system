@@ -267,6 +267,40 @@ def order_complete():
     response.status_code = 200
     return response
 
+@manager.route("/edit_phone_number", methods=['POST'])
+def edit_phone_number():
+    edit_phone = request.form['edit_phone']
+    edit_UID = request.form['edit_UID']
+
+    # check any blanks:
+    for k, v in request.form.items():
+        if v == '':
+            flash(f"Please check: '{k}' is not filled")
+            return redirect(url_for("main.adminpage"))
+
+    try:
+        int(edit_phone)
+    except ValueError:
+        flash("Invalid Value")
+        return redirect(url_for("main.adminpage"))
+
+    # check format
+    if len(edit_phone) != 10 or not edit_phone.isdigit():
+        flash("Please check: phone number can only contain 10 digits")
+        return redirect(url_for("main.adminpage"))
+
+    # update phone
+    db = get_db()
+    db.cursor().execute("""
+        update Users
+        set U_phone = ?
+        where UID = ?
+    """, (edit_phone, edit_UID))
+    db.commit()
+
+    flash("Phone Number Changed!")
+    return redirect(url_for('main.adminpage'))
+
 @manager.route("/edit_price_and_quantity", methods=['POST'])
 def edit_price_and_quantity():
     edit_price = request.form['edit_price']
@@ -302,7 +336,7 @@ def edit_price_and_quantity():
     db.commit()
 
     flash("Edit Successful")
-    return redirect(url_for('main.adminpage'))
+    return redirect(url_for("main.adminpage"))
 
 
 @manager.route("/delete_product", methods=['POST'])
